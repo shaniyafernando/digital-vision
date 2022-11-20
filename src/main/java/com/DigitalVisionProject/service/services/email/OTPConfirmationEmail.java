@@ -16,7 +16,7 @@ public class OTPConfirmationEmail {
 
     @EventListener(ApplicationReadyEvent.class)
     public void sendOrderConfirmationEmail(User user, int code){
-        String body = createOTPConfirmationEmailBody(user.getUserName(),code);
+        String body = createOTPConfirmationEmailBody(user.getUsername(),code);
         String subject = "Digital Vision: Confirm your email";
         emailSenderService.send(subject, user.getEmail(), body);
     }

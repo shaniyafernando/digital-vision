@@ -18,7 +18,12 @@ public class UserService {
     }
 
     public User addUser(User user){
-        return userRepository.save(user);
+        User newUser = new User();
+        newUser.setName(user.getName());
+        newUser.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(user.getPassword());
+        return userRepository.save(newUser);
     }
 
     public List<User> findAllUsers(){

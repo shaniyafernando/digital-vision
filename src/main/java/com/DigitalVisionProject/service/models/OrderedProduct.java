@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table
 public class OrderedProduct implements Serializable {

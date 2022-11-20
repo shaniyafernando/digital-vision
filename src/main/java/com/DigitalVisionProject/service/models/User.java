@@ -1,26 +1,37 @@
 package com.DigitalVisionProject.service.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
+@Table(name = "users")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     private Long id;
     private String name;
-    private String userName;
+    private String username;
     private String email;
     private String password;
 
-    public User() {
-    }
+    public User() {}
 
-    public User(Long id, String name, String userName, String email, String password) {
+
+    public User(Long id, String name, String username, String email, String password) {
         this.id = id;
         this.name = name;
-        this.userName = userName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String name, String username, String email, String password) {
+        this.name = name;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -41,12 +52,12 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

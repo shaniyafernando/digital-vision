@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
+@Table(name="payments")
 public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
