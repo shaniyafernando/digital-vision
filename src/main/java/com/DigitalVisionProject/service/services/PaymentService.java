@@ -12,19 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final OrderConfirmationEmailService orderConfirmationEmailService;
+
+    private final DeliveryStatusService deliveryStatusService;
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository, UserRepository userRepository, OrderConfirmationEmailService orderConfirmationEmailService) {
+    public PaymentService(PaymentRepository paymentRepository, UserRepository userRepository, OrderConfirmationEmailService orderConfirmationEmailService, DeliveryStatusService deliveryStatusService) {
         this.paymentRepository = paymentRepository;
         this.userRepository = userRepository;
         this.orderConfirmationEmailService = orderConfirmationEmailService;
+        this.deliveryStatusService = deliveryStatusService;
     }
 
     public Long addPayment(OrderListDTO orderListDTO, LocalDateTime date){
@@ -45,8 +46,10 @@ public class PaymentService {
     public void pay(PaymentDTO paymentDTO){
         Payment payment = paymentRepository.getReferenceById(paymentDTO.getPaymentId());
         payment.setPaymentType(PaymentType.valueOf(paymentDTO.getPaymentType()));
-        Payment updatedPayment = paymentRepository.save(payment);
+        paymentRepository.save(payment);
         orderConfirmationEmailService.sendOrderConfirmationEmail(paymentDTO);
+        deliveryStatusService.addDeliveryStatus(paymentDTO);
+
     }
 
 
