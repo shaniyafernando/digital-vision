@@ -9,6 +9,7 @@ public class OrderListDTO {
     private double deliveryCharge;
     private double subTotal;
 
+
     public OrderListDTO(){}
 
     public OrderListDTO(Long userId, List<Long> orderIds, double total, double deliveryCharge, double subTotal) {

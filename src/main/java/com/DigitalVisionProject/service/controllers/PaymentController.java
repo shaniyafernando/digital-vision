@@ -1,6 +1,7 @@
 package com.DigitalVisionProject.service.controllers;
 
 import com.DigitalVisionProject.service.dtos.OrderListDTO;
+import com.DigitalVisionProject.service.dtos.PaymentDTO;
 import com.DigitalVisionProject.service.models.Payment;
 import com.DigitalVisionProject.service.models.PaymentType;
 import com.DigitalVisionProject.service.models.User;
@@ -32,10 +33,8 @@ public class PaymentController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> pay(@RequestBody Map<String, Object> payload){
-        int id = (int) payload.get("id");
-        String paymentType = (String) payload.get("paymentType");
-        paymentService.pay( paymentType, (long) id);
+    public ResponseEntity<?> pay(@RequestBody PaymentDTO paymentDTO){
+        paymentService.pay(paymentDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

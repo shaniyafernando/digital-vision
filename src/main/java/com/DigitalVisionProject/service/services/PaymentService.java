@@ -1,6 +1,7 @@
 package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.dtos.OrderListDTO;
+import com.DigitalVisionProject.service.dtos.PaymentDTO;
 import com.DigitalVisionProject.service.models.Payment;
 import com.DigitalVisionProject.service.models.PaymentType;
 import com.DigitalVisionProject.service.models.User;
@@ -41,11 +42,11 @@ public class PaymentService {
         return userRepository.save(user);
     }
 
-    public void pay(String paymentType,Long id){
-        Payment payment = paymentRepository.getReferenceById(id);
-        payment.setPaymentType(PaymentType.valueOf(paymentType));
+    public void pay(PaymentDTO paymentDTO){
+        Payment payment = paymentRepository.getReferenceById(paymentDTO.getPaymentId());
+        payment.setPaymentType(PaymentType.valueOf(paymentDTO.getPaymentType()));
         Payment updatedPayment = paymentRepository.save(payment);
-        orderConfirmationEmailService.sendOrderConfirmationEmail(updatedPayment);
+        orderConfirmationEmailService.sendOrderConfirmationEmail(paymentDTO);
     }
 
 

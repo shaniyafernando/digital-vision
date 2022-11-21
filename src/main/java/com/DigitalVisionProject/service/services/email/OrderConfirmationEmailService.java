@@ -1,16 +1,15 @@
 package com.DigitalVisionProject.service.services.email;
 
+import com.DigitalVisionProject.service.dtos.PaymentDTO;
 import com.DigitalVisionProject.service.models.*;
-import com.DigitalVisionProject.service.repositories.OrderRepository;
-import com.DigitalVisionProject.service.repositories.OrderedProductRepository;
-import com.DigitalVisionProject.service.repositories.ProductRepository;
-import com.DigitalVisionProject.service.repositories.UserRepository;
+import com.DigitalVisionProject.service.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderConfirmationEmailService {
@@ -19,6 +18,7 @@ public class OrderConfirmationEmailService {
     private final OrderRepository orderRepository;
     private final OrderedProductRepository orderedProductRepository;
     private final EmailSenderService emailSenderService;
+    private final PaymentRepository paymentRepository;
 
     private final UserRepository userRepository;
 
@@ -26,32 +26,41 @@ public class OrderConfirmationEmailService {
     public OrderConfirmationEmailService(ProductRepository productRepository,
                                          OrderRepository orderRepository,
                                          OrderedProductRepository orderedProductRepository,
-                                         EmailSenderService emailSenderService, UserRepository userRepository){
+                                         EmailSenderService emailSenderService,
+                                         PaymentRepository paymentRepository,
+                                         UserRepository userRepository){
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderedProductRepository = orderedProductRepository;
         this.emailSenderService = emailSenderService;
+        this.paymentRepository = paymentRepository;
         this.userRepository = userRepository;
     }
 
-//    @EventListener(ApplicationReadyEvent.class)
-    public void sendOrderConfirmationEmail(Payment payment){
-//        String body = buildOrderConfirmationEmailBody(payment);
+    public void sendOrderConfirmationEmail(PaymentDTO payment){
+        String body = buildOrderConfirmationEmailBody(payment);
         String subject = "Digital Vision: Order Confirmation";
         User user = userRepository.getReferenceById(payment.getUserId());
-        emailSenderService.send(subject, user.getEmail(), "");
+        emailSenderService.send(subject, user.getEmail(), body);
     }
 
-    public void buildOrderConfirmationEmailBody(Payment payment){
+    public String buildOrderConfirmationEmailBody(PaymentDTO payment){
         String body = "";
         String header = addHeaderToEmailBody();
-//        Order customerOrder =  orderRepository.getReferenceById(payment.getOrderId());
-//        List<OrderedProduct> orderedProducts = orderedProductRepository.findAllById(Arrays.asList(customerOrder.getOrderProductIds()));
-//        User customer = userRepository.getReferenceById(customerOrder.getUserId());
-//        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getPaymentId(), payment.getPaymentDate(), customer.getName());
-//        String productsInInvoice = addProductsIoInvoiceToEmailBody(orderedProducts, customerOrder.getDeliveryCharges());
-//        String totalAmount = addTotalAmountInInvoiceToEmailBody(customerOrder.getTotalPrice());
-//         body + header + invoiceDetails + productsInInvoice + totalAmount;
+        List<OrderedProduct> orderedProducts = new ArrayList<>();
+        payment.getOrderIds().forEach(
+                orderId -> {
+                    Order order = orderRepository.getReferenceById(orderId);
+                    OrderedProduct orderedProduct = orderedProductRepository.getReferenceById(order.getOrderProductId());
+                    orderedProducts.add(orderedProduct);
+                });
+        User user = userRepository.getReferenceById(payment.getUserId());
+        Payment actualPayment = paymentRepository.getReferenceById(payment.getPaymentId());
+        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(actualPayment.getInvoiceNumber(),
+                actualPayment.getPaymentDate(), user.getName());
+        String productsInInvoice = addProductsIoInvoiceToEmailBody(orderedProducts, payment.getDeliveryCharge());
+        String totalAmount = addTotalAmountInInvoiceToEmailBody(payment.getTotal());
+        return body + header + invoiceDetails + productsInInvoice + totalAmount;
     }
 
     public String addHeaderToEmailBody(){
@@ -77,7 +86,7 @@ public class OrderConfirmationEmailService {
                 "<tbody>\n" +"<tr>\n";
     }
 
-    public String addInvoiceNoAndDateOfPurchaseIoToEmailBody(Long invoiceNumber, LocalDate date, String name){
+    public String addInvoiceNoAndDateOfPurchaseIoToEmailBody(UUID invoiceNumber, LocalDate date, String name){
         return "<td>\n"+ name +"<br>\n"+ invoiceNumber +"<br>\n" +date+"</td>\n" +
                 "</tr>\n" +
                 "<tr>\n" +
