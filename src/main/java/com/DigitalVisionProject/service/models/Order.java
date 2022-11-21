@@ -10,69 +10,90 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long OrderId;
-    private Long[] OrderProductIds;
-    private Long UserId;
-    private double TotalPrice;
-    private double DeliveryCharges;
+    private Long orderId;
+    private Long orderProductId;
+    private Long userId;
+    @Transient
+    private double[] subTotal;
+    @Transient
+    private double[] deliveryFee;
 
-    public Order() {
+    private double total;
+
+    public double[] deliveryCharge(){
+        return new double[]{20.00};
     }
 
-    public Order(Long OrderId,Long[] OrderProductIds,Long UserId, double TotalPrice, double DeliveryCharges) {
-        this.OrderId = OrderId;
-        this.OrderProductIds = OrderProductIds;
-        this.UserId = UserId;
-        this.DeliveryCharges = DeliveryCharges;
-        this.TotalPrice = TotalPrice;
-
-
+    public Order(Long orderId, Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee, double total) {
+        this.orderId = orderId;
+        this.orderProductId = orderProductId;
+        this.userId = userId;
+        this.subTotal = subTotal;
+        this.deliveryFee = deliveryFee;
+        this.total = total;
     }
+
+    public Order(Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee, double total) {
+        this.orderProductId = orderProductId;
+        this.userId = userId;
+        this.subTotal = subTotal;
+        this.deliveryFee = deliveryFee;
+        this.total = total;
+    }
+
+    public Order(){}
 
     public Long getOrderId() {
-        return OrderId;
+        return orderId;
     }
 
-    public void setOrderId(Long OrderId) {
-        this.OrderId = OrderId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Long[] getOrderProductIds() {
-        return OrderProductIds;
+    public Long getOrderProductId() {
+        return orderProductId;
     }
 
-    public void setOrderProductIds(Long[] OrderProductIds) {
-        this.OrderProductIds = OrderProductIds;
+    public void setOrderProductId(Long orderProductId) {
+        this.orderProductId = orderProductId;
     }
 
     public Long getUserId() {
-        return UserId;
+        return userId;
     }
 
-    public void setUserId(Long UserId) {
-        this.UserId = UserId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Double getDeliveryCharges() {
-        return DeliveryCharges;
+    public double[] getSubTotal() {
+        return subTotal;
     }
 
-    public void setDeliveryCharges(double DeliveryCharges) {
-        this.DeliveryCharges = DeliveryCharges;
+    public void setSubTotal(double[] subTotal) {
+        this.subTotal = subTotal;
     }
 
-    public Double getTotalPrice() {
-        return TotalPrice;
+    public double[] getDeliveryFee() {
+        return deliveryCharge();
     }
 
-    public void setTotalPrice(double TotalPrice) {
-        this.TotalPrice = TotalPrice;
+    public void setDeliveryFee(double[] deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
+    public double getTotal() {
+        return subTotal[0] + deliveryFee[0];
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 }

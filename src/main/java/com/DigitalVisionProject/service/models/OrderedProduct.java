@@ -6,47 +6,51 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 
-//@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table
 public class OrderedProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
-    private Long ProductId;
-    private int QuantityBought;
+    private Long id;
+    private Long productId;
+    private int quantityBought;
 
     public OrderedProduct() {
     }
 
-    public OrderedProduct(Long Id,Long ProductId,int QuantityBought) {
-        this.Id = Id;
-        this.ProductId = ProductId;
-        this.QuantityBought = QuantityBought;
+    public OrderedProduct(Long productId, int quantityBought) {
+        this.productId = productId;
+        this.quantityBought = quantityBought;
     }
 
-    public Long Id() {
-        return Id;
+    public OrderedProduct(Long id, Long productId, int quantityBought) {
+        this.id = id;
+        this.productId = productId;
+        this.quantityBought = quantityBought;
     }
 
-    public void setId(Long Id) {
-        this.Id = Id;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getProductId() {
-        return ProductId;
+        return productId;
     }
 
-    public void setProductId(Long ProductId) {
-        this.ProductId = ProductId;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public double getQuantityBought() {
-        return QuantityBought;
+    public int getQuantityBought() {
+        return quantityBought;
     }
 
-    public void setQuantityBought(int QuantityBought) {
-        this.QuantityBought = QuantityBought;
+    public void setQuantityBought(int quantityBought) {
+        this.quantityBought = quantityBought;
     }
-
 }

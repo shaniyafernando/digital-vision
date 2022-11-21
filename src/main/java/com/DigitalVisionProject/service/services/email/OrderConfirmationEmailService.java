@@ -36,23 +36,23 @@ public class OrderConfirmationEmailService {
 
 //    @EventListener(ApplicationReadyEvent.class)
     public void sendOrderConfirmationEmail(Payment payment){
-        String body = buildOrderConfirmationEmailBody(payment);
+//        String body = buildOrderConfirmationEmailBody(payment);
         String subject = "Digital Vision: Order Confirmation";
         Order customerOrder =  orderRepository.getReferenceById(payment.getOrderId());
         User user = userRepository.getReferenceById(customerOrder.getUserId());
-        emailSenderService.send(subject, user.getEmail(), body);
+        emailSenderService.send(subject, user.getEmail(), "");
     }
 
-    public String buildOrderConfirmationEmailBody(Payment payment){
+    public void buildOrderConfirmationEmailBody(Payment payment){
         String body = "";
         String header = addHeaderToEmailBody();
         Order customerOrder =  orderRepository.getReferenceById(payment.getOrderId());
-        List<OrderedProduct> orderedProducts = orderedProductRepository.findAllById(Arrays.asList(customerOrder.getOrderProductIds()));
-        User customer = userRepository.getReferenceById(customerOrder.getUserId());
-        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getPaymentId(), payment.getPaymentDate(), customer.getName());
-        String productsInInvoice = addProductsIoInvoiceToEmailBody(orderedProducts, customerOrder.getDeliveryCharges());
-        String totalAmount = addTotalAmountInInvoiceToEmailBody(customerOrder.getTotalPrice());
-        return body + header + invoiceDetails + productsInInvoice + totalAmount;
+//        List<OrderedProduct> orderedProducts = orderedProductRepository.findAllById(Arrays.asList(customerOrder.getOrderProductIds()));
+//        User customer = userRepository.getReferenceById(customerOrder.getUserId());
+//        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getPaymentId(), payment.getPaymentDate(), customer.getName());
+//        String productsInInvoice = addProductsIoInvoiceToEmailBody(orderedProducts, customerOrder.getDeliveryCharges());
+//        String totalAmount = addTotalAmountInInvoiceToEmailBody(customerOrder.getTotalPrice());
+//         body + header + invoiceDetails + productsInInvoice + totalAmount;
     }
 
     public String addHeaderToEmailBody(){
