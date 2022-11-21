@@ -1,13 +1,15 @@
 package com.DigitalVisionProject.service.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name="carts")
-public class Cart {
+public class Cart implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,6 +35,14 @@ public class Cart {
         this.userId = userId;
         this.productId = productId;
         this.quantityAddedToCart = quantityAddedToCart;
+    }
+
+    public double subTotal(double priceOfProduct,int quantityAddedToCart){
+        return priceOfProduct * quantityAddedToCart;
+    }
+
+    public double totalPrice(double price){
+        return price++;
     }
 
     public Long getId() {
