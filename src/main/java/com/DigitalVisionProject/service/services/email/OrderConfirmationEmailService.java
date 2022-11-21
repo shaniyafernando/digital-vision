@@ -38,15 +38,14 @@ public class OrderConfirmationEmailService {
     public void sendOrderConfirmationEmail(Payment payment){
 //        String body = buildOrderConfirmationEmailBody(payment);
         String subject = "Digital Vision: Order Confirmation";
-        Order customerOrder =  orderRepository.getReferenceById(payment.getOrderId());
-        User user = userRepository.getReferenceById(customerOrder.getUserId());
+        User user = userRepository.getReferenceById(payment.getUserId());
         emailSenderService.send(subject, user.getEmail(), "");
     }
 
     public void buildOrderConfirmationEmailBody(Payment payment){
         String body = "";
         String header = addHeaderToEmailBody();
-        Order customerOrder =  orderRepository.getReferenceById(payment.getOrderId());
+//        Order customerOrder =  orderRepository.getReferenceById(payment.getOrderId());
 //        List<OrderedProduct> orderedProducts = orderedProductRepository.findAllById(Arrays.asList(customerOrder.getOrderProductIds()));
 //        User customer = userRepository.getReferenceById(customerOrder.getUserId());
 //        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getPaymentId(), payment.getPaymentDate(), customer.getName());

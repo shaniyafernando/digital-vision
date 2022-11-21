@@ -3,7 +3,8 @@ package com.DigitalVisionProject.service.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name="payments")
@@ -13,21 +14,27 @@ public class Payment implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long paymentId;
     private LocalDate paymentDate;
-    private float paymentAmount;
+    private double paymentAmount;
+    private LocalDateTime dateOfOrder;
+
+    private PaymentType paymentType;
+
+    private Long userId;
+
+    private UUID invoiceNumber;
 
     public Payment() {
     }
 
-    private enum paymentType{CREDIT,PAYPAL};
-
-    public Payment(Long paymentId, LocalDate paymentDate, float paymentAmount, Long orderId) {
+    public Payment(Long paymentId, LocalDate paymentDate, double paymentAmount, LocalDateTime dateOfOrder, PaymentType paymentType, Long userId, UUID invoiceNumber) {
         this.paymentId = paymentId;
         this.paymentDate = paymentDate;
         this.paymentAmount = paymentAmount;
-        this.orderId = orderId;
+        this.dateOfOrder = dateOfOrder;
+        this.paymentType = paymentType;
+        this.userId = userId;
+        this.invoiceNumber = invoiceNumber;
     }
-
-    private Long orderId;
 
     public Long getPaymentId() {
         return paymentId;
@@ -38,14 +45,14 @@ public class Payment implements Serializable {
     }
 
     public LocalDate getPaymentDate() {
-        return paymentDate;
+        return LocalDate.now();
     }
 
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    public float getPaymentAmount() {
+    public double getPaymentAmount() {
         return paymentAmount;
     }
 
@@ -53,11 +60,39 @@ public class Payment implements Serializable {
         this.paymentAmount = paymentAmount;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public void setPaymentAmount(double paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public LocalDateTime getDateOfOrder() {
+        return dateOfOrder;
+    }
+
+    public void setDateOfOrder(LocalDateTime dateOfOrder) {
+        this.dateOfOrder = dateOfOrder;
+    }
+
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public UUID getInvoiceNumber() {
+        return UUID.randomUUID();
+    }
+
+    public void setInvoiceNumber(UUID invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 }

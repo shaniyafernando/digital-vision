@@ -2,6 +2,7 @@ package com.DigitalVisionProject.service.dtos;
 
 public class TotalDTO {
 
+
     private double[] deliveryCharge;
     private double[] subTotal;
 
@@ -23,10 +24,4 @@ public class TotalDTO {
         this.subTotal = subTotal;
     }
 
-    public double getTotal() {
-        return deliveryCharge[0] + subTotal[0];
-    }
-
-    public void setTotal(double total) {
-    }
 }

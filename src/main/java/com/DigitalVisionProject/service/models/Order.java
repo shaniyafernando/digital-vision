@@ -24,27 +24,24 @@ public class Order implements Serializable {
     @Transient
     private double[] deliveryFee;
 
-    private double total;
 
     public double[] deliveryCharge(){
         return new double[]{20.00};
     }
 
-    public Order(Long orderId, Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee, double total) {
+    public Order(Long orderId, Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee) {
         this.orderId = orderId;
         this.orderProductId = orderProductId;
         this.userId = userId;
         this.subTotal = subTotal;
         this.deliveryFee = deliveryFee;
-        this.total = total;
     }
 
-    public Order(Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee, double total) {
+    public Order(Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee) {
         this.orderProductId = orderProductId;
         this.userId = userId;
         this.subTotal = subTotal;
         this.deliveryFee = deliveryFee;
-        this.total = total;
     }
 
     public Order(){}
@@ -89,11 +86,4 @@ public class Order implements Serializable {
         this.deliveryFee = deliveryFee;
     }
 
-    public double getTotal() {
-        return subTotal[0] + deliveryFee[0];
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
 }
