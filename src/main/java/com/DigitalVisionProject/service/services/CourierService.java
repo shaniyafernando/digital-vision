@@ -23,7 +23,7 @@ public class CourierService {
         Courier courier = new Courier(deliveryStatus.getId(), deliveryStatus.getStatus());
     }
 
-    public Courier updateStatus(String Status, Long courierID){
+    public Courier updateStatus(String Status,Long courierID){
         Courier courier = courierRepository.getReferenceById(courierID);
         courier.setStatus(OrderStatus.valueOf(Status).name());
         return courierRepository.save(courier);
