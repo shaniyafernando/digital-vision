@@ -1,4 +1,5 @@
-package com.DigitalVision.service.models;
+package com.DigitalVisionProject.service.models;
+
 
 import javax.persistence.*;
 

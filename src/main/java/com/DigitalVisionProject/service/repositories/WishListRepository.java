@@ -1,6 +1,7 @@
-package com.DigitalVision.service.repositories;
+package com.DigitalVisionProject.service.repositories;
 
-import com.DigitalVision.service.models.WishList;
+
+import com.DigitalVisionProject.service.models.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

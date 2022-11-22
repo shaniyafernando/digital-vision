@@ -1,11 +1,12 @@
-package com.DigitalVision.service.controllers;
+package com.DigitalVisionProject.service.controllers;
 
-import com.DigitalVision.service.common.ApiResponse;
-import com.DigitalVision.service.models.Product;
-import com.DigitalVision.service.models.UserEntity;
-import com.DigitalVision.service.models.WishList;
-import com.DigitalVision.service.services.UserService;
-import com.DigitalVision.service.services.WishListService;
+
+import com.DigitalVisionProject.service.exceptions.ApiResponse;
+import com.DigitalVisionProject.service.models.Product;
+import com.DigitalVisionProject.service.models.User;
+import com.DigitalVisionProject.service.models.WishList;
+import com.DigitalVisionProject.service.services.UserService;
+import com.DigitalVisionProject.service.services.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class WishListController {
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addToWishList(@RequestBody Product product){
-        UserEntity user = userService.findUserById(uId);
+        User user = userService.findUserById(uId);
         WishList wishList = new WishList(user.getId(),product.getId());
         wishListService.createWishList(wishList);
 

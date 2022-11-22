@@ -1,6 +1,6 @@
-package com.DigitalVision.service.dtos;
+package com.DigitalVisionProject.service.dtos;
 
-import com.DigitalVision.service.models.Product;
+import com.DigitalVisionProject.service.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class WishListDTO {
