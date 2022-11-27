@@ -1,9 +1,9 @@
 package com.DigitalVisionProject.service.controllers;
 
 
+import com.DigitalVisionProject.service.dtos.WishListDTO;
 import com.DigitalVisionProject.service.exceptions.ApiResponse;
 import com.DigitalVisionProject.service.models.Product;
-import com.DigitalVisionProject.service.models.User;
 import com.DigitalVisionProject.service.models.WishList;
 import com.DigitalVisionProject.service.services.UserService;
 import com.DigitalVisionProject.service.services.WishListService;
@@ -12,38 +12,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/wishlist")
 public class WishListController {
-    private UserService userService;
-    //Hardcoded need to get it from session
-    private Long uId = 9L;
-    private WishListService wishListService;
+
+    private final WishListService wishListService;
 
     @Autowired
-    public WishListController(UserService userService, WishListService wishListService) {
-        this.userService = userService;
+    public WishListController(WishListService wishListService) {
         this.wishListService = wishListService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addToWishList(@RequestBody Product product){
-        User user = userService.findUserById(uId);
-        WishList wishList = new WishList(user.getId(),product.getId());
-        wishListService.createWishList(wishList);
-
-        return new ResponseEntity<>(new ApiResponse(true,"Added to WishList"), HttpStatus.CREATED);
+    @PutMapping("/new")
+    public ResponseEntity<WishList> addProductToWishList(@RequestBody WishListDTO wishListDTO){
+        WishList wishList = wishListService.addProductToWishList(wishListDTO.getUserId(), wishListDTO.getProductId());
+        return new ResponseEntity<>(wishList,HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<ApiResponse> removeFromWishList(@RequestBody Product product){
-        wishListService.deleteProductFromWishList(product.getId());
-        return new ResponseEntity<>(new ApiResponse(true,"Removed from WishList"), HttpStatus.OK);
+    @PutMapping()
+    public ResponseEntity<WishList> removeProductFromWishList(@RequestBody WishListDTO wishListDTO){
+        WishList wishList = wishListService.removeProductFromWishList(wishListDTO.getUserId(), wishListDTO.getProductId());
+        return new ResponseEntity<>(wishList,HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse> getWishList(@RequestBody Product product){
-        wishListService.readWishList(uId);
-        return new ResponseEntity<>(new ApiResponse(true,"get WishList"), HttpStatus.OK);
+    @PostMapping()
+    public ResponseEntity<WishList> removeProductFromWishList(@RequestBody Map<String, Object> payload){
+        int userId = (int) payload.get("userId");
+        WishList wishList = wishListService.getWishList((long) userId);
+        return new ResponseEntity<>(wishList,HttpStatus.OK);
     }
+
 }

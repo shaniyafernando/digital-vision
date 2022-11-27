@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class WishListDTO {
     private Long userId;
-    private Product product;
+    private Long productId;
 
-    @Autowired
-    public WishListDTO(Long userId, Product product) {
+    public WishListDTO(Long userId, Long productId) {
         this.userId = userId;
-        this.product = product;
+        this.productId = productId;
     }
 
     public Long getUserId() {
@@ -21,11 +20,11 @@ public class WishListDTO {
         this.userId = userId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

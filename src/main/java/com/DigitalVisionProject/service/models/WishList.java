@@ -2,60 +2,28 @@ package com.DigitalVisionProject.service.models;
 
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity
-@Table(name = "wishlist")
-public class WishList {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    private Long userId;
 
-    public Long getProductId() {
-        return productId;
-    }
+public class WishList  extends User{
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    private Long productId;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "productId", referencedColumnName = "id", insertable = false, updatable = false)
-    private Product product;
+    @OneToMany(mappedBy = "wish_list")
+    private List<Product> products;
 
     public WishList() {
     }
 
-    public WishList(Long userId, Long productId) {
-        this.userId = userId;
-        this.productId = productId;
+
+    public WishList(Long id, List<Product> products) {
+        super(id);
+        this.products = products;
     }
 
-    //Getters and Setters
-
-    public Long getId() {
-        return id;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
 }
