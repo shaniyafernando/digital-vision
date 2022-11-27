@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -38,20 +39,24 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/all/search")
-    public  ResponseEntity<List<Product>> getAllProductsBySearchQuery(@RequestBody String query){
+    @PostMapping("/all/search")
+    public  ResponseEntity<List<Product>> getAllProductsBySearchQuery(@RequestBody Map<String, Object> payload){
+        String query = (String) payload.get("query");
         List<Product> products = productService.getAllProductsBySearchQuery(query);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping("/all/price-range")
-    public  ResponseEntity<List<Product>> getAllProductsByPriceRange(@RequestBody double minPrice, double maxPrice){
+    @PostMapping("/all/price-range")
+    public  ResponseEntity<List<Product>> getAllProductsByPriceRange(@RequestBody Map<String, Object> payload){
+        double minPrice = (double) payload.get("minPrice");
+        double maxPrice = (double) payload.get("maxPrice");
         List<Product> products = productService.getAllProductsByPriceRange(minPrice, maxPrice);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping("/all/category-type")
-    public  ResponseEntity<List<Product>> getAllProductsByCategory(@RequestBody String category){
+    @PostMapping("/all/category-type")
+    public  ResponseEntity<List<Product>> getAllProductsByCategory(@RequestBody Map<String, Object> payload){
+        String category = (String) payload.get("category");
         List<Product> products = productService.getAllProductsByCategory(category);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

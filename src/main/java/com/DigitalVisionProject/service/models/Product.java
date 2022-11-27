@@ -22,10 +22,21 @@ public class Product implements Serializable {
     private double price;
     private int quantity;
 
-    public Product() {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "wish_list_id")
+    private WishList wishList;
+
+    public WishList getWishList() {
+        return wishList;
     }
 
-    public Product(Long id, String image, String title, String description, String colour, String brand,String category, double price, int quantity) {
+    public void setWishList(WishList wishList) {
+        this.wishList = wishList;
+    }
+
+    public Product() {}
+    public Product(Long id, String image, String title, String description, String colour,
+                   String brand,String category, double price, int quantity) {
         this.id = id;
         this.image = image;
         this.title = title;
@@ -36,8 +47,8 @@ public class Product implements Serializable {
         this.price = price;
         this.quantity = quantity;
     }
-
-    public Product(String image, String title, String description, String colour, String brand ,String category, double price, int quantity) {
+    public Product(String image, String title, String description, String colour, String brand
+            ,String category, double price, int quantity) {
         this.image = image;
         this.title = title;
         this.description = description;

@@ -1,9 +1,9 @@
 package com.DigitalVisionProject.service.services;
 
-import com.DigitalVisionProject.service.dtos.PaymentDTO;
 import com.DigitalVisionProject.service.models.Courier;
 import com.DigitalVisionProject.service.models.DeliveryStatus;
 import com.DigitalVisionProject.service.models.OrderStatus;
+import com.DigitalVisionProject.service.models.Payment;
 import com.DigitalVisionProject.service.repositories.DeliveryStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class DeliveryStatusService {
         this.courierService = courierService;
         this.deliveryStatusRepository= deliveryStatusRepository;
     }
-    public DeliveryStatus addDeliveryStatus (PaymentDTO paymentDTO){
+    public DeliveryStatus addDeliveryStatus (Payment paymentDTO){
         DeliveryStatus delivery = new DeliveryStatus();
         delivery.setPaymentId(paymentDTO.getPaymentId());
         delivery.setStatus(OrderStatus.ORDER_PROCESSING.name());

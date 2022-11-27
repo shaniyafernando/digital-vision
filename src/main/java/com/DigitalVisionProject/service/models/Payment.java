@@ -9,67 +9,75 @@ import java.util.UUID;
 @Entity
 @Table(name="payments")
 public class Payment implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
-    private Long paymentId;
-    private LocalDate paymentDate;
-    private double paymentAmount;
-    private LocalDateTime dateOfOrder;
+    private Long id;
 
+    private LocalDate date;
+
+    private double amount;
+
+    @OneToOne()
+    @JoinColumn(name="order_id")
+    private Order order;
+
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
-
-    private Long userId;
 
     private UUID invoiceNumber;
 
     public Payment() {
     }
 
-    public Payment(Long paymentId, LocalDate paymentDate, double paymentAmount, LocalDateTime dateOfOrder, PaymentType paymentType, Long userId, UUID invoiceNumber) {
-        this.paymentId = paymentId;
-        this.paymentDate = paymentDate;
-        this.paymentAmount = paymentAmount;
-        this.dateOfOrder = dateOfOrder;
+    public Payment(LocalDate date, double amount, Order order, PaymentType paymentType, UUID invoiceNumber) {
+        this.date = date;
+        this.amount = amount;
+        this.order = order;
         this.paymentType = paymentType;
-        this.userId = userId;
         this.invoiceNumber = invoiceNumber;
     }
 
-    public Long getPaymentId() {
-        return paymentId;
+    public Payment(Long id, LocalDate date, double amount, Order order, PaymentType paymentType, UUID invoiceNumber) {
+        this.id = id;
+        this.date = date;
+        this.amount = amount;
+        this.order = order;
+        this.paymentType = paymentType;
+        this.invoiceNumber = invoiceNumber;
     }
 
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
+    public Long getId() {
+        return id;
     }
 
-    public LocalDate getPaymentDate() {
-        return LocalDate.now();
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public double getPaymentAmount() {
-        return paymentAmount;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public void setPaymentAmount(float paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setPaymentAmount(double paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public LocalDateTime getDateOfOrder() {
-        return dateOfOrder;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setDateOfOrder(LocalDateTime dateOfOrder) {
-        this.dateOfOrder = dateOfOrder;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public PaymentType getPaymentType() {
@@ -80,19 +88,11 @@ public class Payment implements Serializable {
         this.paymentType = paymentType;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     public UUID getInvoiceNumber() {
         return UUID.randomUUID();
     }
 
-    public void setInvoiceNumber(UUID invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public void setInvoiceNumber() {
+        this.invoiceNumber = getInvoiceNumber();
     }
 }

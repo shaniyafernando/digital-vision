@@ -1,79 +1,48 @@
 package com.DigitalVisionProject.service.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.OneToMany;
+import java.util.List;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
-@Entity
-@Table(name="carts")
-public class Cart implements Serializable {
+public class Cart extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Long userId;
-    private Long productId;
-    private int quantityAddedToCart;
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> cartItems;
 
+    private double total;
 
-    public Cart() {
+    public double calculatePriceForTheNumberOfPiecesBoughtForCartItem(CartItem cartItem) {
+        return cartItem.getQuantityAddedToCart() * cartItem.getProduct().getPrice();
     }
 
-    @Autowired
-    public Cart(Long id, Long userId, Long productId, int quantityAddedToCart) {
-        this.id = id;
-        this.userId = userId;
-        this.productId = productId;
-        this.quantityAddedToCart = quantityAddedToCart;
+    public double calculateTotalPrice(List<CartItem> cartItems) {
+        double sum = 0.0;
+        for (CartItem cartItem : cartItems) {
+            double amount = calculatePriceForTheNumberOfPiecesBoughtForCartItem(cartItem);
+            sum += amount;
+        }
+        return sum;
     }
 
-    @Autowired
-    public Cart( Long userId, Long productId, int quantityAddedToCart) {
-        this.userId = userId;
-        this.productId = productId;
-        this.quantityAddedToCart = quantityAddedToCart;
+    public Cart(Long id, List<CartItem> cartItems, double total) {
+        super(id);
+        this.cartItems = cartItems;
+        this.total = total;
     }
 
-    public double subTotal(double priceOfProduct,int quantityAddedToCart){
-        return priceOfProduct * quantityAddedToCart;
+    public double getTotal() {
+        return total;
     }
 
-    public double totalPrice(double price){
-        return price++;
+    public void setTotal(double total) {
+        this.total = total;
     }
 
-    public Long getId() {
-        return id;
+    public List<CartItem> getCartItems() {
+        return cartItems;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public int getQuantityAddedToCart() {
-        return quantityAddedToCart;
-    }
-
-    public void setQuantityAddedToCart(int quantityAddedToCart) {
-        this.quantityAddedToCart = quantityAddedToCart;
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 }

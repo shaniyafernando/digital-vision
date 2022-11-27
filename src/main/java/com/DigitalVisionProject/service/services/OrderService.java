@@ -6,6 +6,7 @@ import com.DigitalVisionProject.service.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,61 +40,35 @@ public class OrderService {
     }
 
 
-    public List<Order> addOrderDetails(Long userId){
-        List<Order> orderList = new ArrayList<>();
-        OrderedProduct orderedProduct  = new OrderedProduct();
-        List<Cart> cartList = cartRepository.findAll();
-        cartList.forEach(cart -> {
-            if(cart.getUserId().equals(userId)){
-                Order newOrder = new Order();
-                orderedProduct.setProductId(cart.getProductId());
-                orderedProduct.setQuantityBought(cart.getQuantityAddedToCart());
-                OrderedProduct savedOrderedProduct = orderedProductRepository.save(orderedProduct);
-                newOrder.setOrderProductId(savedOrderedProduct.getId());
-                newOrder.setUserId(userId);
-                newOrder.setDeliveryFee(newOrder.deliveryCharge());
-                double[] subTotal = cartService.calculateTotalPrice(userId);
-                newOrder.setSubTotal(subTotal);
-                orderRepository.save(newOrder);
-                orderList.add(newOrder);
-            }
+    public Order addOrderDetails(Cart cart){
+        Order newOrder = new Order();
+        List<OrderedProduct> orderedProducts = new ArrayList<>();
+        cart.getCartItems().forEach(item ->
+        {
+            OrderedProduct orderedProduct = new OrderedProduct();
+            orderedProduct.setProduct(item.getProduct());
+            orderedProduct.setQuantityBought(item.getQuantityAddedToCart());
+            orderedProducts.add(orderedProduct);
         });
-        return orderList;
+        newOrder.setOrderProducts(orderedProducts);
+        newOrder.setSubTotal(cart.getTotal());
+        newOrder.setUserId(cart.getId());
+        return orderRepository.save(newOrder);
     }
 
-    public Order getOrdersById(Long id){
+    public Order getOrderById(Long id){
         return orderRepository.getReferenceById(id);
     }
 
-    public OrderListDTO getOrders(Long userId){
-        OrderListDTO orderListDTO = new OrderListDTO();
-        orderListDTO.setUserId(userId);
-
-        List<Long> orderIds = new ArrayList<>();
-        List<Order> orders = orderRepository.findAll();
-        orders.forEach(order -> {
-            if(order.getUserId().equals(userId)){
-                orderIds.add(order.getOrderId());
-            }
-        });
-        Order order = orderRepository.getReferenceById(userId);
-        double[] deliveryCharge = order.getDeliveryFee();
-        orderListDTO.setDeliveryCharge(deliveryCharge[0]);
-        double[] subTotal = cartService.calculateTotalPrice(userId);
-        orderListDTO.setSubTotal(subTotal[0]);
-        double totalAmount = subTotal[0] + deliveryCharge[0];
-        orderListDTO.setTotal(totalAmount);
-        orderListDTO.setOrderIds(orderIds);
-        return orderListDTO;
-    }
 
     public void updateDeliveryAddressOfOrder(Long userId, String deliveryAddress){
         User user = userRepository.getReferenceById(userId);
         user.setDeliveryAddress(deliveryAddress);
     }
 
-    public Long placeOrder(OrderListDTO orderListDTO){
-        LocalDateTime dateOfOrder = LocalDateTime.now();
-        return paymentService.addPayment(orderListDTO,dateOfOrder);
+    public Order placeOrder(Order order){
+        Order orderPlaced = orderRepository.getReferenceById(order.getId());
+        orderPlaced.setDate(LocalDate.now());
+        return orderRepository.save(order);
     }
 }

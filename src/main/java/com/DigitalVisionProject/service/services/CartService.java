@@ -2,9 +2,8 @@ package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.dtos.CartDTO;
 import com.DigitalVisionProject.service.models.Cart;
-import com.DigitalVisionProject.service.models.Product;
+import com.DigitalVisionProject.service.models.CartItem;
 import com.DigitalVisionProject.service.repositories.CartRepository;
-import com.DigitalVisionProject.service.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,53 +14,51 @@ import java.util.List;
 public class CartService {
 
     private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
+    private final CartItemService cartItemService;
 
 
     @Autowired
-    public CartService(CartRepository cartRepository, ProductRepository productRepository){
+    public CartService(CartRepository cartRepository, CartItemService cartItemService){
         this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
+        this.cartItemService = cartItemService;
     }
 
     public Cart addProductToCart(CartDTO cartDTO){
-        Cart cart = new Cart();
-        cart.setUserId(cartDTO.getUserId());
-        cart.setProductId(cartDTO.getProduct().getId());
-        cart.setQuantityAddedToCart(cartDTO.getQuantityAddedToCart());
+        CartItem cartItem = cartItemService.addCartItem(cartDTO);
+        Cart cart = cartRepository.getReferenceById(cartDTO.getUserId());
+        List<CartItem> cartItemList = cart.getCartItems();
+        cartItemList.add(cartItem);
         return cartRepository.save(cart);
     }
 
-    public void removeProductFromCart(Long id){
-        cartRepository.deleteById(id);
+    public Cart removeProductFromCart(Long userId, Long cartItemId){
+        Cart cart = cartRepository.getReferenceById(userId);
+        List<CartItem> items = new ArrayList<>();
+        cart.getCartItems().forEach(
+                item -> {
+                    if(item.getId().equals(cartItemId)){
+                        cartItemService.deleteCartItem(item.getId());
+                    }
+                    items.add(item);
+                }
+
+        );
+
+        cart.setCartItems(items);
+        return cartRepository.save(cart);
     }
 
-    public List<Cart> getAllProductsInCart(Long userId){
-        List<Cart> carts = cartRepository.findAll();
-        List<Cart> cartListOfUser = new ArrayList<>();
-        for (Cart cart: carts) {
-            if(userId.equals(cart.getUserId())){
-                cartListOfUser.add(cart);
-            }
-        }
-        return cartListOfUser;
+    public Cart getAllProductsInCart(Long userId){
+        Cart cart = cartRepository.getReferenceById(userId);
+        double total = calculateTotalPrice(userId);
+        cart.setTotal(total);
+        return cartRepository.save(cart);
     }
 
-    public Cart updateQuantityAddToCart(Long cartId, int quantity){
-        Cart cart = cartRepository.getReferenceById(cartId);
-        cart.setQuantityAddedToCart(quantity);
-        return cart;
-    }
 
-    public double[] calculateTotalPrice(Long userId){
-        List<Cart> productsInUserCart = getAllProductsInCart(userId);
-        final double[] total = {0.0};
-        productsInUserCart.forEach(cart -> {
-            Product product = productRepository.getReferenceById(cart.getProductId());
-            double subTotal =  cart.subTotal(product.getPrice(),cart.getQuantityAddedToCart());
-            total[0] = cart.totalPrice(subTotal);
-        });
-        return total;
+    public double calculateTotalPrice(Long userId){
+        Cart cart = cartRepository.getReferenceById(userId);
+        return cart.calculateTotalPrice(cart.getCartItems());
     }
 
 

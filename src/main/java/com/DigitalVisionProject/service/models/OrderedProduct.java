@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -13,21 +14,26 @@ public class OrderedProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long productId;
+
+    @OneToOne()
+    @JoinColumn(name="product")
+    private Product product;
+
     private int quantityBought;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_order_id")
+    private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public OrderedProduct() {
-    }
-
-    public OrderedProduct(Long productId, int quantityBought) {
-        this.productId = productId;
-        this.quantityBought = quantityBought;
-    }
-
-    public OrderedProduct(Long id, Long productId, int quantityBought) {
-        this.id = id;
-        this.productId = productId;
-        this.quantityBought = quantityBought;
     }
 
     public Long getId() {
@@ -38,12 +44,12 @@ public class OrderedProduct implements Serializable {
         this.id = id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantityBought() {

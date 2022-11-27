@@ -1,65 +1,44 @@
 package com.DigitalVisionProject.service.services.email;
 
-import com.DigitalVisionProject.service.dtos.PaymentDTO;
 import com.DigitalVisionProject.service.models.*;
 import com.DigitalVisionProject.service.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class OrderConfirmationEmailService {
 
-    private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
-    private final OrderedProductRepository orderedProductRepository;
     private final EmailSenderService emailSenderService;
-    private final PaymentRepository paymentRepository;
 
     private final UserRepository userRepository;
 
     @Autowired
-    public OrderConfirmationEmailService(ProductRepository productRepository,
-                                         OrderRepository orderRepository,
-                                         OrderedProductRepository orderedProductRepository,
-                                         EmailSenderService emailSenderService,
-                                         PaymentRepository paymentRepository,
-                                         UserRepository userRepository){
-        this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
-        this.orderedProductRepository = orderedProductRepository;
+    public OrderConfirmationEmailService(EmailSenderService emailSenderService, UserRepository userRepository){
         this.emailSenderService = emailSenderService;
-        this.paymentRepository = paymentRepository;
         this.userRepository = userRepository;
     }
 
-    public void sendOrderConfirmationEmail(PaymentDTO payment){
+
+    public void sendOrderConfirmationEmail(Payment payment){
         String body = buildOrderConfirmationEmailBody(payment);
         String subject = "Digital Vision: Order Confirmation";
-        User user = userRepository.getReferenceById(payment.getUserId());
+        User user = userRepository.getReferenceById(payment.getOrder().getUserId());
         emailSenderService.send(subject, user.getEmail(), body);
     }
 
-    public String buildOrderConfirmationEmailBody(PaymentDTO payment){
+    public String buildOrderConfirmationEmailBody(Payment payment){
         String body = "";
         String header = addHeaderToEmailBody();
-        List<OrderedProduct> orderedProducts = new ArrayList<>();
-        payment.getOrderIds().forEach(
-                orderId -> {
-                    Order order = orderRepository.getReferenceById(orderId);
-                    OrderedProduct orderedProduct = orderedProductRepository.getReferenceById(order.getOrderProductId());
-                    orderedProducts.add(orderedProduct);
-                });
-        User user = userRepository.getReferenceById(payment.getUserId());
-        Payment actualPayment = paymentRepository.getReferenceById(payment.getPaymentId());
-        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(actualPayment.getInvoiceNumber(),
-                actualPayment.getPaymentDate(), user.getName());
-        String productsInInvoice = addProductsIoInvoiceToEmailBody(orderedProducts, payment.getDeliveryCharge());
-        String totalAmount = addTotalAmountInInvoiceToEmailBody(payment.getTotal());
+        User user = userRepository.getReferenceById(payment.getOrder().getUserId());
+        String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getInvoiceNumber(),
+                payment.getDate(), user.getName());
+        String productsInInvoice = addProductsIoInvoiceToEmailBody(payment.getOrder().getOrderProducts(),
+                payment.getOrder().getDeliveryFee());
+        String totalAmount = addTotalAmountInInvoiceToEmailBody(payment.getAmount());
         return body + header + invoiceDetails + productsInInvoice + totalAmount;
     }
 
@@ -98,7 +77,7 @@ public class OrderConfirmationEmailService {
     public String addProductsIoInvoiceToEmailBody(List<OrderedProduct> orderedProducts, double deliveryFee){
         String productRecords = "";
         for (OrderedProduct orderedProduct: orderedProducts) {
-            Product product = productRepository.getReferenceById(orderedProduct.getProductId());
+            Product product = orderedProduct.getProduct();
             String productRecord = "<tr>\n" +
                     "<td>\n" + product.getTitle() +"</td>\n" +
                     "<td style=\"text-align: right;vertical-align: top;\">\n" +"$"+ product.getPrice()+"</td>\n" +

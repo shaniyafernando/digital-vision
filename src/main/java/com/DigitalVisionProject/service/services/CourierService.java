@@ -10,17 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CourierService {
-    private final DeliveryStatusService deliveryStatusService;
     private final CourierRepository courierRepository;
 
     @Autowired
-    public CourierService(DeliveryStatusService deliveryStatusService, CourierRepository courierRepository) {
-        this.deliveryStatusService = deliveryStatusService;
+    public CourierService(CourierRepository courierRepository) {
         this.courierRepository = courierRepository;
     }
 
     public void addNewCourier(DeliveryStatus deliveryStatus){
         Courier courier = new Courier(deliveryStatus.getId(), deliveryStatus.getStatus());
+        courierRepository.save(courier);
     }
 
     public Courier updateStatus(String Status,Long courierID){

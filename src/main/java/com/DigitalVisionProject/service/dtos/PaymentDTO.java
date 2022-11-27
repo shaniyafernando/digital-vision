@@ -8,7 +8,8 @@ public class PaymentDTO extends OrderListDTO {
 
     private Long paymentId;
 
-    public PaymentDTO(Long userId, List<Long> orderIds, double total, double deliveryCharge, double subTotal, String paymentType, Long paymentId) {
+    public PaymentDTO(Long userId, List<Long> orderIds, double total, double deliveryCharge, double subTotal,
+                      String paymentType, Long paymentId) {
         super(userId, orderIds, total, deliveryCharge, subTotal);
         this.paymentType = paymentType;
         this.paymentId = paymentId;

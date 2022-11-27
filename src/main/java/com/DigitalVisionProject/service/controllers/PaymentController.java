@@ -33,8 +33,8 @@ public class PaymentController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> pay(@RequestBody PaymentDTO paymentDTO){
-        paymentService.pay(paymentDTO);
+    public ResponseEntity<?> pay(@RequestBody Payment payment){
+        paymentService.pay(payment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

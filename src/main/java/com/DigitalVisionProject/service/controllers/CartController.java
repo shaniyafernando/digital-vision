@@ -30,38 +30,22 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeProductFromCart(@RequestBody Map<String, Object> payload){
-        int id = (int) payload.get("id");
-        cartService.removeProductFromCart((long) id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Cart> removeProductFromCart(@RequestBody Map<String, Object> payload){
+        int userId = (int) payload.get("userId");
+        int cartItemId = (int) payload.get("cartItemId");
+        Cart cart = cartService.removeProductFromCart((long) userId,(long) cartItemId);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
 
     @PostMapping("/products")
-    public ResponseEntity<List<Cart>> getAllProductsInCart(@RequestBody Map<String, Object> payload){
+    public ResponseEntity<Cart> getAllProductsInCart(@RequestBody Map<String, Object> payload){
         int id = (int) payload.get("id");
-        List<Cart> cartList = cartService.getAllProductsInCart((long) id);
-        System.out.println((long) id);
-        System.out.println(cartList);
-        ResponseEntity<List<Cart>> response = new ResponseEntity<>(cartList, HttpStatus.OK);
-        System.out.println(response);
-        return response;
+        Cart cartList = cartService.getAllProductsInCart((long) id);
+        return new ResponseEntity<>(cartList, HttpStatus.OK);
     }
 
-    @PutMapping()
-    public ResponseEntity<Cart> updateQuantityAddToCart(@RequestBody Map<String, Object> payload){
-        int id = (int) payload.get("cartId");
-        int quantity = (int) payload.get("quantity");
-        Cart cart = cartService.updateQuantityAddToCart((long) id, quantity);
-        return new ResponseEntity<>(cart, HttpStatus.OK);
-    }
 
-    @PostMapping("/total")
-    public ResponseEntity<double[]> getTotalPrice(@RequestBody Map<String, Object> payload){
-        int id = (int) payload.get("userId");
-        double[] totalPrice = cartService.calculateTotalPrice((long) id);
-        return new ResponseEntity<>(totalPrice, HttpStatus.OK);
-    }
 
 
 

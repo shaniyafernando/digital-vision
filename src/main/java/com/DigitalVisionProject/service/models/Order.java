@@ -1,12 +1,10 @@
 package com.DigitalVisionProject.service.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.mapping.Array;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -16,50 +14,45 @@ import java.util.List;
 public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderId;
-    private Long orderProductId;
+    private Long id;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderedProduct> orderProducts;
+
     private Long userId;
-    @Transient
-    private double[] subTotal;
-    @Transient
-    private double[] deliveryFee;
+
+    private LocalDate date;
+
+    private double subTotal;
+
+    private double deliveryFee;
+
+    public Order() {}
 
 
-    public double[] deliveryCharge(){
-        return new double[]{20.00};
+
+    public Long getId() {
+        return id;
     }
 
-    public Order(Long orderId, Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee) {
-        this.orderId = orderId;
-        this.orderProductId = orderProductId;
-        this.userId = userId;
-        this.subTotal = subTotal;
-        this.deliveryFee = deliveryFee;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Order(Long orderProductId, Long userId, double[] subTotal, double[] deliveryFee) {
-        this.orderProductId = orderProductId;
-        this.userId = userId;
-        this.subTotal = subTotal;
-        this.deliveryFee = deliveryFee;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public Order(){}
-
-    public Long getOrderId() {
-        return orderId;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public List<OrderedProduct> getOrderProducts() {
+        return orderProducts;
     }
 
-    public Long getOrderProductId() {
-        return orderProductId;
-    }
-
-    public void setOrderProductId(Long orderProductId) {
-        this.orderProductId = orderProductId;
+    public void setOrderProducts(List<OrderedProduct> orderProducts) {
+        this.orderProducts = orderProducts;
     }
 
     public Long getUserId() {
@@ -70,20 +63,19 @@ public class Order implements Serializable {
         this.userId = userId;
     }
 
-    public double[] getSubTotal() {
+    public double getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(double[] subTotal) {
+    public void setSubTotal(double subTotal) {
         this.subTotal = subTotal;
     }
 
-    public double[] getDeliveryFee() {
-        return deliveryCharge();
+    public double getDeliveryFee() {
+        return 150.00;
     }
 
-    public void setDeliveryFee(double[] deliveryFee) {
-        this.deliveryFee = deliveryFee;
+    public void setDeliveryFee() {
+        this.deliveryFee = getDeliveryFee();
     }
-
 }

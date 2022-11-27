@@ -11,6 +11,7 @@ import com.DigitalVisionProject.service.services.email.OrderConfirmationEmailSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -28,28 +29,23 @@ public class PaymentService {
         this.deliveryStatusService = deliveryStatusService;
     }
 
-    public Long addPayment(OrderListDTO orderListDTO, LocalDateTime date){
-        Payment savedPaymentRecord = new Payment();
-        savedPaymentRecord.setDateOfOrder(date);
-        savedPaymentRecord.setUserId(orderListDTO.getUserId());
-        savedPaymentRecord.setPaymentAmount(orderListDTO.getTotal());
-        Payment payment = paymentRepository.save(savedPaymentRecord);
-        return payment.getPaymentId();
-    }
-
     public User updateBillingAddressForPayment(Long userId, String billingAddress){
         User user = userRepository.getReferenceById(userId);
         user.setBillingAddress(billingAddress);
         return userRepository.save(user);
     }
 
-    public void pay(PaymentDTO paymentDTO){
-        Payment payment = paymentRepository.getReferenceById(paymentDTO.getPaymentId());
-        payment.setPaymentType(PaymentType.valueOf(paymentDTO.getPaymentType()));
-        paymentRepository.save(payment);
-        orderConfirmationEmailService.sendOrderConfirmationEmail(paymentDTO);
-        deliveryStatusService.addDeliveryStatus(paymentDTO);
-
+    public void pay(Payment payment){
+        Payment newPayment = new Payment(
+                LocalDate.now(),
+                payment.getAmount(),
+                payment.getOrder(),
+                payment.getPaymentType(),
+                payment.getInvoiceNumber()
+        );
+        Payment savedPayment = paymentRepository.save(newPayment);
+        orderConfirmationEmailService.sendOrderConfirmationEmail(savedPayment);
+        deliveryStatusService.addDeliveryStatus(savedPayment);
     }
 
 
