@@ -1,0 +1,8 @@
+<div fxLayout="row wrap" *ngIf="!noProductData">
+    <div fxFlex="20%" *ngFor="let product of products" >
+        <app-product-card [product]="product" [component]="component"></app-product-card>
+    </div>
+</div>
+<div class="no-data-container" *ngIf="noProductData">
+    <h4>No products found!</h4>
+</div>

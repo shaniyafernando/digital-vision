@@ -1,0 +1,45 @@
+.main-container{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    align-items: flex-start;
+    
+}
+
+mat-form-field{
+    width: 100%;
+}
+
+.height{
+    height: 300px;
+}
+
+.no-data-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-button{
+    margin-left: 20px;
+}
+
+.child-container{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.card-container{
+    padding-top: 5px;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+mat-drawer-container{
+    width: 100vw;
+    height: 100%;
+}

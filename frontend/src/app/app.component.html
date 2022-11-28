@@ -1,0 +1,24 @@
+<!-- Note fron Shaniya to Disal: In this component both registered and unregistered users can access the userEntity-main-page,
+  likewise admin can access the admin main page. The functionalities that registered and unregistered users can access
+  has been written in a comment in its respective component.-->
+
+  <!-- Note from Shaniya to all: Until Disal configures the frontend based on userEntity roles,
+    if you want to build your specific feature, simply comment out the
+  app-admin-main-page tag. If you want to add dummy data in your product table in your database.
+  Comment out the app-userEntity-main-page and run your app. and make sure to uncomment it before you commit and push the branch.
+  if you don't, I WILL KILL YOU. let's minimize merge conflicts as much as possible :) -->
+
+<div *ngIf="showPublicDashboard">
+  <app-public-main-page></app-public-main-page>
+</div>
+<div *ngIf="showUserDashboard">
+  <app-user-main-page></app-user-main-page>
+</div>
+<div *ngIf="showAdminDashboard">
+  <app-admin-main-page></app-admin-main-page>
+</div>
+
+
+
+
+

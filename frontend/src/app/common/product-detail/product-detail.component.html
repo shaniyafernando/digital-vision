@@ -1,0 +1,73 @@
+<!-- Note from Shaniya to Disal: Unregistered users can't access the wishlist buttons. -->
+<div>
+    <mat-card>
+        <mat-card-content>
+            <div class="main-container">
+                <div class="child-container">
+                    <img  src="{{finalProduct.image}}" alt="">
+                </div>
+                <div class="child-conatiner padding">
+                    <h4 class="pro-d-title">
+                        {{finalProduct.title}}
+                    </h4>
+                    <p>
+                        {{finalProduct.description}}
+                    </p>
+                    <div class="product_meta">
+                        <span class="posted_in"> <strong>Category:</strong> <p>
+                            {{finalProduct.category}}
+                        </p></span>
+                        <span class="posted_in"> <strong>Colour:</strong> <p>
+                            {{finalProduct.colour}}
+                        </p></span>
+                        <span class="tagged_as"><strong>Brand:</strong> <p>
+                            {{finalProduct.brand}}
+                        </p></span>
+                    </div>
+                    
+                    <strong>Price : 
+                        <span class="pro-price"> 
+                        {{finalProduct.price}}
+                        </span>
+                    </strong>
+                    
+                
+                    <strong *ngIf="!showQuantityFormField">Quantity : 
+                        <span class="pro-price"> 
+                        {{finalProduct.quantity}}
+                        </span>
+                    </strong>
+                    <div class="column-container">
+                        <form [formGroup]="quantityForm" (ngSubmit)="onSubmit()" *ngIf="showQuantityFormField">
+                            <mat-form-field appearance="fill" color="accent" class="quantity" floatLabel="always">
+                                <mat-label>Quantity</mat-label>
+                                <input matInput type="quantity" placeholder="1">
+                            </mat-form-field>
+                            <button mat-stroked-button type="submit" class="button-spacing">Add to cart</button>
+                        </form>
+                    <button mat-stroked-button   type="submit" class="button-spacing" *ngIf="showRemoveFromCartButton">Remove product from cart</button>    
+                    <button mat-stroked-button   type="submit" class="button-spacing" *ngIf="showAddToWishListButton">Add to wish list</button>
+                    <button mat-stroked-button color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton">Remove product from Wish List</button>
+                    <button mat-stroked-button  type="button" *ngIf="showGoBackButton" (click)="navigateToPreviousPage(finalComponent)" class="go-back-button">Go back</button>
+                    </div>
+                </div> 
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-stroked-button color="accent" type="submit" *ngIf="showEditActionButton" (click)="navigateToProductForm(finalProduct)">Edit</button>
+            <button mat-stroked-button type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" (click)="deleteProduct(finalProduct.id)" >Delete</button>
+            <button mat-stroked-button type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" routerLink="/home" >Cancel</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+     
+        
+    
+      
+
+    
+    
+
+  
+

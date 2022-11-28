@@ -1,0 +1,52 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+    <div fxFlex style="padding-bottom:20px;">
+        <div>{{formTitle}}</div>
+    </div>
+    <div fxFlex>
+        <form [formGroup]="productForm">
+            <div fxLayout="row wrap"  fxLayoutGap="20px">
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Title</mat-label>
+                    <input matInput placeholder="Title" formControlName="title" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Description" placehoder #input maxlength="255" formControlName="description" required></textarea>
+                    <mat-hint align="end">{{input.value.length || 0}}/255</mat-hint>
+                </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Image URL</mat-label>
+                    <input matInput placeholder="Image Url" placehoder type="url" formControlName="image" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Colour</mat-label>
+                    <input matInput placeholder="Colour" placehoder formControlName="colour" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Brand</mat-label>
+                    <input matInput placeholder="Brand" placehoder formControlName="brand" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Category</mat-label>
+                    <mat-select matSelect formControlName="category" placeholder="Category" required>
+                      <mat-option *ngFor="let category of categories" [value]="category">{{category}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent" >
+                    <mat-label>Price</mat-label>
+                    <input matInput placeholder="Price" placehoder type="number" placeholder="0" formControlName="price">
+                    <span matPrefix>$&nbsp;</span>
+                    <span matSuffix>.00</span>
+                </mat-form-field>
+                <mat-form-field fxFlex="40%" appearance="outline"  color="accent">
+                    <mat-label>Quality</mat-label>
+                    <input matInput placeholder="Quantity in Inventory" placehoder type="number" formControlName="quality" required>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+    <div fxFlex>
+        <button mat-flat-button type="submit" color="accent" (click)="saveProduct()" class="left-spacing">Save</button>
+        <button mat-flat-button type="button" color="primary" routerLink="/home" style="margin-left: 20px;">Cancel</button>
+    </div>
+</div>
