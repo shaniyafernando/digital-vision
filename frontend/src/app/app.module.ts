@@ -23,17 +23,15 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { ProductDetailComponent } from "./common/product-detail/product-detail.component";
-import { AdminMainPageComponent } from "./core/admin-main-page/admin-main-page.component";
-import { ProductFormComponent } from "./core/admin-main-page/product-form/product-form.component";
-import { UserPermissionComponent } from "./core/admin-main-page/user-permission/user-permission.component";
-import { LoginComponent } from "./core/authentication/login/login.component";
-import { EmailConfirmationComponent } from "./core/authentication/register/email-confirmation/email-confirmation/email-confirmation.component";
-import { RegisterComponent } from "./core/authentication/register/register.component";
-import { PublicMainPageComponent } from "./core/public-main-page/public-main-page.component";
-import { UserMainPageComponent } from "./core/user-main-page/user-main-page.component";
-import { UserMainPageModule } from "./core/user-main-page/user-main-page.module";
-import { MaterialModule } from "./material.module";
 import {MatStepperModule} from '@angular/material/stepper';
+import { ToolbarPublicComponent } from './toolbars/toolbar-public/toolbar-public.component';
+import { ToolbarCustomerComponent } from './toolbars/toolbar-customer/toolbar-customer.component';
+import { ToolbarAdminComponent } from './toolbars/toolbar-admin/toolbar-admin.component';
+import { RegisterComponent } from "./authentication/register/register.component";
+import { ProductFormComponent } from "./admin-frontend/product-form/product-form.component";
+import { UserPermissionComponent } from "./admin-frontend/user-permission/user-permission.component";
+import { LoginComponent } from "./authentication/login/login.component";
+import { EmailConfirmationComponent } from "./authentication/register/email-confirmation/email-confirmation/email-confirmation.component";
 
 
 
@@ -41,18 +39,16 @@ import {MatStepperModule} from '@angular/material/stepper';
   declarations: [
     AppComponent,
     ProductDetailComponent,
-    AdminMainPageComponent,
     ProductFormComponent,
     LoginComponent,
     RegisterComponent,
-    PublicMainPageComponent,
     UserPermissionComponent,
     EmailConfirmationComponent,
-    UserMainPageComponent
+    ToolbarPublicComponent,
+    ToolbarCustomerComponent,
+    ToolbarAdminComponent
   ],
   imports: [
-    MaterialModule,
-    UserMainPageModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,

@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+    <span style="padding-left: 30% ;">Digital Vision</span>
+    <button mat-icon-button style="margin-left: 30% ;" color="accent" routerLink=""><mat-icon>home</mat-icon></button>
+    <button mat-icon-button style="margin-left: 30px ;" color="accent" routerLink="/wish-list"><mat-icon>favorite</mat-icon></button>
+    <button mat-icon-button style="margin-left: 30px  ;" color="accent" routerLink="/cart"><mat-icon>shopping_cart</mat-icon></button>
+    <button mat-icon-button style="margin-left: 30px  ;" color="accent" routerLink="/delivery"><mat-icon>local_shipping</mat-icon></button>
+    <button mat-icon-button style="margin-left: 30px  ;" color="accent" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+      <button mat-menu-item (click)="deleteAccount()">
+        <mat-icon>delete</mat-icon>
+        <span>Delete account</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserMainPageComponent } from './user-main-page.component';
+import { ToolbarAdminComponent } from './toolbar-admin.component';
 
-describe('UserMainPageComponent', () => {
-  let component: UserMainPageComponent;
-  let fixture: ComponentFixture<UserMainPageComponent>;
+describe('ToolbarAdminComponent', () => {
+  let component: ToolbarAdminComponent;
+  let fixture: ComponentFixture<ToolbarAdminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserMainPageComponent ]
+      declarations: [ ToolbarAdminComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UserMainPageComponent);
+    fixture = TestBed.createComponent(ToolbarAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
