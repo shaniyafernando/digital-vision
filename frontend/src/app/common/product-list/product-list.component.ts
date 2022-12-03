@@ -122,7 +122,7 @@ export class ProductListComponent implements OnInit {
   public getAllProducts(): any {
     this.productService.getAllProducts().subscribe(
       (response) => {
-        this.products.concat(response)
+        this.products = response
       });
   }
 
