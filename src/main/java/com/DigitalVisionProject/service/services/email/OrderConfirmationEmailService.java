@@ -35,7 +35,7 @@ public class OrderConfirmationEmailService {
         String header = addHeaderToEmailBody();
         User user = userRepository.getReferenceById(payment.getOrder().getUserId());
         String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getInvoiceNumber(),
-                payment.getDate(), user.getName());
+                payment.getDate(), user.getFirstName() + "" + user.getLastName());
         String productsInInvoice = addProductsIoInvoiceToEmailBody(payment.getOrder().getOrderProducts(),
                 payment.getOrder().getDeliveryFee());
         String totalAmount = addTotalAmountInInvoiceToEmailBody(payment.getAmount());

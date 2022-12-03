@@ -22,8 +22,7 @@ public class Product implements Serializable {
     private double price;
     private int quantity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "wish_list_id")
+    @ManyToOne
     private WishList wishList;
 
     public WishList getWishList() {

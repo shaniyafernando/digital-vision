@@ -1,27 +1,76 @@
-package com.DigitalVisionProject.service.services.email;
+package com.DigitalVisionProject.service.services;
 
+import com.DigitalVisionProject.service.dtos.RegistrationRequest;
+import com.DigitalVisionProject.service.models.ConfirmationToken;
+import com.DigitalVisionProject.service.models.Role;
 import com.DigitalVisionProject.service.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import com.DigitalVisionProject.service.services.email.EmailSenderService;
+import com.DigitalVisionProject.service.services.email.EmailValidator;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public class OTPConfirmationEmail {
 
-    private final EmailSenderService emailSenderService;
+import java.time.LocalDateTime;
 
-    @Autowired
-    public OTPConfirmationEmail(EmailSenderService emailSenderService) {
-        this.emailSenderService = emailSenderService;
+@Service
+public class RegistrationService {
+
+    private final UserService appUserService;
+    private EmailValidator emailValidator;
+    private final ConfirmationTokenService confirmationTokenService;
+    private final EmailSenderService emailSender;
+
+    public RegistrationService(UserService appUserService, EmailValidator emailValidator,
+                               ConfirmationTokenService confirmationTokenService, EmailSenderService emailSender) {
+        this.appUserService = appUserService;
+        this.emailValidator = emailValidator;
+        this.confirmationTokenService = confirmationTokenService;
+        this.emailSender = emailSender;
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void sendOrderConfirmationEmail(User user, int code){
-        String body = createOTPConfirmationEmailBody(user.getUsername(),code);
-        String subject = "Digital Vision: Confirm your email";
-        emailSenderService.send(subject, user.getEmail(), body);
+    public String register(RegistrationRequest request) {
+        boolean isValidEmail = emailValidator.test(request.getEmail());
+        if(!isValidEmail){
+            throw new IllegalStateException("email not valid");
+        }
+        String token =  appUserService.signUpUser(
+                new User(
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getEmail(),
+                        request.getPassword(),
+                        Role.USER
+                )
+        );
+        String link = "http://localhost:8080/api/v1/registration/confirm?token="+token;
+
+        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(),link));
+
+        return token;
     }
 
-    public String createOTPConfirmationEmailBody(String username,int otpCode){
+    @Transactional
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+
+        confirmationTokenService.setConfirmedAt(token);
+        return "confirmed";
+    }
+
+    private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -77,7 +126,7 @@ public class OTPConfirmationEmail {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + username + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please enter the code to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <p> "+ otpCode +"</p> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

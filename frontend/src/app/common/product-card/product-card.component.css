@@ -1,5 +1,5 @@
 mat-card{
-    width: 250px;
+    width: 230px;
     height: 330px;
     margin-top: 20px;
     margin-left: 10px ;
@@ -25,7 +25,7 @@ a{
 
 
 p{
-    color: #fc5959;
+    color: black;
 }
 
 mat-divider{

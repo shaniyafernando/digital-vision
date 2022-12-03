@@ -1,9 +1,18 @@
-<div>
-    <div  class="main-container">
-        <div fxFlex style="padding-top:20px">
-            <button mat-flat-button style="margin-left:20px" color="accent" (click)="navigateToProductForm()">Create a new product</button>
-            <button mat-flat-button style="margin-left:10px" color="accent" routerLink="/user-permission">User Permission</button>
-        </div>
+<div fxLayout="column">
+    <div fxFlex *ngIf="isLoggedIn && userIsAnAdmin">
+        <app-toolbar-admin></app-toolbar-admin>
+    </div>
+    <div fxFlex *ngIf="!isLoggedIn">
+        <app-toolbar-public></app-toolbar-public>
+    </div>
+    <div fxFlex *ngIf="isLoggedIn && !userIsAnAdmin">
+        <app-toolbar-customer></app-toolbar-customer>
+    </div>
+    <div fxFlex style="padding-top:20px" *ngIf="isLoggedIn && userIsAnAdmin">
+        <button mat-flat-button style="margin-left:20px" color="accent" routerLink="/product-form" >Create a new product</button>
+        <button mat-flat-button style="margin-left:10px" color="accent" routerLink="/user-permission">User Permission</button>
+    </div>       
+    <div fxFlex  class="main-container">
         <div class="child-1-container">
             <div class="search-form-field">
                 <mat-form-field appearance="outline" color="accent">
@@ -44,8 +53,8 @@
                 <app-product-card [product]="product" [component]="component"></app-product-card>
             </div>
         </div>
-        <div class="no-data-container" *ngIf="noProductData">
+        <!-- <div class="no-data-container" *ngIf="noProductData">
             <h4>No products found!</h4>
-        </div>
+        </div> -->
     </div>
 </div>

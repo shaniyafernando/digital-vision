@@ -26,15 +26,24 @@ export class ProductFormComponent implements OnInit {
   brand = new FormControl('',[Validators.required]);
   description = new FormControl('',[Validators.required]);
   category = new FormControl('',[Validators.required]);
-  price = new FormControl(0,[Validators.required]);
-  quantity = new FormControl(0,[Validators.required]);
+  price = new FormControl('',[Validators.required]);
+  quantity = new FormControl('',[Validators.required]);
 
-  productForm!: FormGroup;
-  data!:any;
-  formTitle!: String;
-  product!: Product;
+  productForm: FormGroup = this.formBuilder.group({
+    title:this.title,
+    description: this.description,
+    image: this.image,
+    category: this.category,
+    brand: this.brand,
+    colour: this.colour,
+    price: this.price,
+    quantity: this.quantity
+  })
+
+  data:any;
+  product: Product = {} as Product;
   isSubmitted: boolean = false;
-  savedProduct!:Product;
+  savedProduct:Product = {} as Product;
   categories: String[] = [];
 
   get formControls() { return this.productForm.controls; }
@@ -44,27 +53,10 @@ export class ProductFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.categories = Object.values(Category);
-    this.buildProductForm();
     this.data = history.state.data;
-    this.formTitle = this.data.title;
-    this.product = this.data.product;
-    if(this.product != null){
-      this.setValue();
-    }
   }
 
-  public buildProductForm():void{
-    this.productForm  =  this.formBuilder.group({
-      title:this.title,
-      description: this.description,
-      image: this.image,
-      category: this.category,
-      brand: this.brand,
-      colour: this.colour,
-      price: this.price,
-      quantity: this.quantity
-  });
-  }
+  
 
   public setValue(){
     this.productForm.get('title')?.setValue(this.product.title);
@@ -92,10 +84,10 @@ export class ProductFormComponent implements OnInit {
       this.invalidProductForm();
     }
     
-    if(this.formTitle == 'Add new product'){
-      this.productService.addNewProduct(this.savedProduct);
-      this.router.navigate(["/home"]);
-    }
+    // if(this.formTitle == 'Add new product'){
+    //   this.productService.addNewProduct(this.savedProduct);
+    //   this.router.navigate(["/home"]);
+    // }
 
     this.productService.updateProduct(this.savedProduct);
     this.router.navigate(["/home"]);

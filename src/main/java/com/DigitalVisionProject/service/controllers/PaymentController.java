@@ -1,17 +1,13 @@
 package com.DigitalVisionProject.service.controllers;
 
-import com.DigitalVisionProject.service.dtos.OrderListDTO;
-import com.DigitalVisionProject.service.dtos.PaymentDTO;
+import com.DigitalVisionProject.service.models.Address;
 import com.DigitalVisionProject.service.models.Payment;
-import com.DigitalVisionProject.service.models.PaymentType;
-import com.DigitalVisionProject.service.models.User;
 import com.DigitalVisionProject.service.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,10 +21,10 @@ public class PaymentController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity<User> updateBillingAddressForPayment(@RequestBody Map<String, Object> payload){
+    public ResponseEntity<Address> updateBillingAddressForPayment(@RequestBody Map<String, Object> payload){
         int userId = (int) payload.get("userId");
         String billingAddress = (String) payload.get("billingAddress");
-        User updatedUser = paymentService.updateBillingAddressForPayment((long) userId,billingAddress);
+        Address updatedUser = paymentService.updateBillingAddressForPayment((long) userId,billingAddress);
         return new ResponseEntity<>(updatedUser,HttpStatus.OK);
     }
 

@@ -4,6 +4,14 @@ mat-card{
     align-self: center;
 }
 
+.center-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+}
+
 .left-spacing{
     margin-left: 20px;
 }
@@ -87,7 +95,7 @@ mat-form-field{
     }
     .prod-cat li ul li a:hover,.prod-cat li ul li a:focus, .prod-cat li ul li.active a , .prod-cat li a:hover,.prod-cat li a:focus, .prod-cat li a.active{
         background: none;
-        color: #ff7261;
+        color:#ffc400;
     }
     
     .pro-lab{
@@ -114,7 +122,7 @@ mat-form-field{
         position: relative;
     }
     .adtocart {
-        background: #fc5959;
+        background: #ffc400;
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -142,7 +150,7 @@ mat-form-field{
     }
     
     .product-list .price {
-        color:#fc5959 ;
+        color:#ffc400 ;
         font-size: 15px;
     }
     
@@ -171,7 +179,7 @@ mat-form-field{
         margin-bottom: 10px;
     }
     .product_meta a, .pro-price{
-        color:#fc5959 ;
+        color:#ffc400 ;
     }
     
     .pro-price, .amount-old {

@@ -21,9 +21,9 @@ public class DeliveryStatusService {
         this.courierService = courierService;
         this.deliveryStatusRepository= deliveryStatusRepository;
     }
-    public DeliveryStatus addDeliveryStatus (Payment paymentDTO){
+    public DeliveryStatus addDeliveryStatus (Payment payment){
         DeliveryStatus delivery = new DeliveryStatus();
-        delivery.setPaymentId(paymentDTO.getPaymentId());
+        delivery.setPaymentId(payment.getId());
         delivery.setStatus(OrderStatus.ORDER_PROCESSING.name());
         delivery.setDate(LocalDate.now());
         return deliveryStatusRepository.save(delivery);

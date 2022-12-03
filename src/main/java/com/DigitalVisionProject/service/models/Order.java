@@ -16,7 +16,7 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany
     private List<OrderedProduct> orderProducts;
 
     private Long userId;

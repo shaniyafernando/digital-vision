@@ -1,13 +1,12 @@
 package com.DigitalVisionProject.service.models;
 
-
 import javax.persistence.*;
 import java.util.List;
 
-
+@Entity
 public class WishList  extends User{
 
-    @OneToMany(mappedBy = "wish_list")
+    @OneToMany
     private List<Product> products;
 
     public WishList() {

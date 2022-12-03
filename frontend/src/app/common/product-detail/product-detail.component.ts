@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
@@ -19,13 +19,14 @@ export class ProductDetailComponent implements OnInit {
   showGoBackButton: boolean = false;
   showEditActionButton: boolean = false;
   showDeleteActionButton: boolean = false;
-  showRemoveFromCartButton: boolean = false;
 
   data!:any;
 
   finalProduct!: Product;
   finalComponent!: String;
   quantityForm!: FormGroup;
+  loggedIn: boolean = false;
+  userIsAdmin: boolean = false;
 
   constructor(private router: Router, private productService: ProductService, private fb : FormBuilder,
     private authenticationService : AuthenticationService) { }
@@ -34,7 +35,6 @@ export class ProductDetailComponent implements OnInit {
     this.data = history.state.data;
     this.finalProduct = this.data.product;
     this.finalComponent = this.data.component;
-    this.displayButtons();
     this.fb.group({
       quantity: new FormControl(0,[Validators.required])
     });
@@ -42,51 +42,55 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private grantAccessToButtons(): void{
-    const admin = this.authenticationService.userRoleIsAdmin();
-    if(admin == true){
+    this.userIsAdmin = this.authenticationService.userRoleIsAdmin();
+    this.loggedIn = this.authenticationService.isLoggedIn();
+
+    if(this.userIsAdmin && this.loggedIn){
+
+      this.showEditActionButton = true;
+      this.showDeleteActionButton = true;
+
+      if(this.finalComponent == 'ProductListComponent'){
+        this.showAddToWishListButton = false;
+        this.showRemoveFromWishListButton = false;
+        this.showQuantityFormField = false;
+        this.showGoBackButton = false;
+      }
+      
+    }
+
+    if(!this.userIsAdmin && this.loggedIn){
+
+      this.showEditActionButton = false;
+      this.showDeleteActionButton = false;
+
+      if(this.finalComponent == 'ProductListComponent'){
+        this.showAddToWishListButton = true;
+        this.showRemoveFromWishListButton = false;
+        this.showQuantityFormField = true;
+        this.showGoBackButton = true;
+      }
+      if(this.finalComponent == 'WishListComponent'){
+        this.showAddToWishListButton = false;
+        this.showRemoveFromWishListButton = true;
+        this.showQuantityFormField = false;
+        this.showGoBackButton = true;
+      }
+    }
+
+    if(!this.loggedIn){
       this.showAddToWishListButton= false;
       this.showRemoveFromWishListButton = false;
       this.showQuantityFormField= false;
-      this.showGoBackButton = false;
-      this.showEditActionButton = true;
-      this.showDeleteActionButton = true;
-      this.showRemoveFromCartButton = false;
-    }
-
-    this.showAddToWishListButton= true;
-      this.showRemoveFromWishListButton = true;
-      this.showQuantityFormField= true;
       this.showGoBackButton = true;
       this.showEditActionButton = false;
       this.showDeleteActionButton = false;
-      this.showRemoveFromCartButton = true;
+    }
+
   }
 
   public onSubmit(){}
 
-  public displayButtons():void{
-    if(this.finalComponent == 'ProductListComponent'){
-      this.showAddToWishListButton = true;
-      this.showRemoveFromWishListButton = false;
-      this.showQuantityFormField = true;
-      this.showGoBackButton = true;
-      this.showRemoveFromCartButton = false;
-    }
-    if(this.finalComponent == 'WishListComponent'){
-      this.showAddToWishListButton = false;
-      this.showRemoveFromWishListButton = true;
-      this.showQuantityFormField = true;
-      this.showGoBackButton = true;
-      this.showRemoveFromCartButton = false;
-    }
-    if(this.finalComponent == 'CartComponent'){
-      this.showAddToWishListButton = false;
-      this.showRemoveFromWishListButton = false;
-      this.showQuantityFormField = false;
-      this.showGoBackButton = true;
-      this.showRemoveFromCartButton = true;
-    }
-  }
 
   public navigateToPreviousPage(component:String):void{
     if(component == 'ProductListComponent'){

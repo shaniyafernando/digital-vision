@@ -9,14 +9,12 @@ public class CartItem {
     @Id
     private Long id;
 
-    @OneToOne()
-    @JoinColumn(name="product_id")
+    @OneToOne
     private Product product;
 
     private int quantityAddedToCart;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
+    @ManyToOne
     private Cart cart;
 
     public Cart getCart() {

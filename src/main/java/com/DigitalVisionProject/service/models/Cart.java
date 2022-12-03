@@ -1,15 +1,20 @@
 package com.DigitalVisionProject.service.models;
 
 
+import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+@Entity
 public class Cart extends User {
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany
     private List<CartItem> cartItems;
 
     private double total;
+
+    public Cart() {
+    }
 
     public double calculatePriceForTheNumberOfPiecesBoughtForCartItem(CartItem cartItem) {
         return cartItem.getQuantityAddedToCart() * cartItem.getProduct().getPrice();

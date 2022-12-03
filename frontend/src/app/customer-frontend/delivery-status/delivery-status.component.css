@@ -48,7 +48,7 @@ body{margin-top:20px;}
     border: 1px solid #e1e7ec;
     border-radius: 50%;
     background-color: #f5f5f5;
-    color: #374250;
+    color: #673ab7;
     font-size: 38px;
     line-height: 81px;
     z-index: 5
@@ -72,12 +72,12 @@ body{margin-top:20px;}
 
 .steps .step.completed .step-icon-wrap::before,
 .steps .step.completed .step-icon-wrap::after {
-    background-color: #0da9ef
+    background-color:#ffc400
 }
 
 .steps .step.completed .step-icon {
-    border-color: #0da9ef;
-    background-color: #0da9ef;
+    border-color:#ffc400;
+    background-color:#ffc400;
     color: #fff
 }
 

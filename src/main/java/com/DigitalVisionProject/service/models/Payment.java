@@ -19,8 +19,7 @@ public class Payment implements Serializable {
 
     private double amount;
 
-    @OneToOne()
-    @JoinColumn(name="order_id")
+    @OneToOne
     private Order order;
 
     @Enumerated(EnumType.STRING)

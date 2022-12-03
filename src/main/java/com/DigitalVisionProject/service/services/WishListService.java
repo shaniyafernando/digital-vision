@@ -1,10 +1,8 @@
 package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.models.Product;
-import com.DigitalVisionProject.service.models.User;
 import com.DigitalVisionProject.service.models.WishList;
 import com.DigitalVisionProject.service.repositories.ProductRepository;
-import com.DigitalVisionProject.service.repositories.UserRepository;
 import com.DigitalVisionProject.service.repositories.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

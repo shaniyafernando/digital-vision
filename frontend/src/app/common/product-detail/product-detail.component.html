@@ -1,5 +1,13 @@
-<!-- Note from Shaniya to Disal: Unregistered users can't access the wishlist buttons. -->
-<div>
+<div *ngIf="loggedIn && userIsAdmin">
+    <app-toolbar-admin></app-toolbar-admin>
+</div>
+<div *ngIf="!loggedIn">
+    <app-toolbar-public></app-toolbar-public>
+</div>
+<div *ngIf="loggedIn && !userIsAdmin">
+    <app-toolbar-customer></app-toolbar-customer>
+</div>
+<div class="center-container">
     <mat-card>
         <mat-card-content>
             <div class="main-container">
@@ -43,20 +51,19 @@
                                 <mat-label>Quantity</mat-label>
                                 <input matInput type="quantity" placeholder="1">
                             </mat-form-field>
-                            <button mat-stroked-button type="submit" class="button-spacing">Add to cart</button>
-                        </form>
-                    <button mat-stroked-button   type="submit" class="button-spacing" *ngIf="showRemoveFromCartButton">Remove product from cart</button>    
-                    <button mat-stroked-button   type="submit" class="button-spacing" *ngIf="showAddToWishListButton">Add to wish list</button>
-                    <button mat-stroked-button color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton">Remove product from Wish List</button>
-                    <button mat-stroked-button  type="button" *ngIf="showGoBackButton" (click)="navigateToPreviousPage(finalComponent)" class="go-back-button">Go back</button>
+                            <button mat-flat-button color="primary" type="submit" class="button-spacing">Add to cart</button>
+                        </form>   
+                    <button mat-flat-button color="primary"  type="submit" class="button-spacing" *ngIf="showAddToWishListButton">Add to wish list</button>
+                    <button mat-flat-button  color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton">Remove product from Wish List</button>
+                    <button mat-flat-button color="primary" type="button" *ngIf="showGoBackButton" (click)="navigateToPreviousPage(finalComponent)" class="go-back-button">Go back</button>
                     </div>
                 </div> 
             </div>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-stroked-button color="accent" type="submit" *ngIf="showEditActionButton" (click)="navigateToProductForm(finalProduct)">Edit</button>
-            <button mat-stroked-button type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" (click)="deleteProduct(finalProduct.id)" >Delete</button>
-            <button mat-stroked-button type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" routerLink="/home" >Cancel</button>
+            <button mat-flat-button color="accent" type="submit" *ngIf="showEditActionButton" (click)="navigateToProductForm(finalProduct)">Edit</button>
+            <button mat-flat-button color="warn" type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" (click)="deleteProduct(finalProduct.id)" >Delete</button>
+            <button mat-flat-button color="primary" type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" routerLink="/home" >Cancel</button>
         </mat-card-actions>
     </mat-card>
 </div>

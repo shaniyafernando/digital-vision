@@ -1,20 +1,18 @@
 package com.DigitalVisionProject.service.services;
 
-import com.DigitalVisionProject.service.dtos.OrderListDTO;
 import com.DigitalVisionProject.service.models.*;
 import com.DigitalVisionProject.service.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderService {
 
-    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final OrderedProductRepository orderedProductRepository;
@@ -26,11 +24,11 @@ public class OrderService {
 
 
     @Autowired
-    public OrderService(UserRepository userRepository, ProductRepository productRepository,
+    public OrderService(AddressRepository addressRepository, ProductRepository productRepository,
                         OrderRepository orderRepository, OrderedProductRepository orderedProductRepository,
                         CartRepository cartRepository,
                         CartService cartService, PaymentService paymentService) {
-        this.userRepository = userRepository;
+        this.addressRepository = addressRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderedProductRepository = orderedProductRepository;
@@ -62,8 +60,9 @@ public class OrderService {
 
 
     public void updateDeliveryAddressOfOrder(Long userId, String deliveryAddress){
-        User user = userRepository.getReferenceById(userId);
+        Address user = addressRepository.getReferenceById(userId);
         user.setDeliveryAddress(deliveryAddress);
+        addressRepository.save(user);
     }
 
     public Order placeOrder(Order order){

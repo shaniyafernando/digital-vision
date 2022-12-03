@@ -2,10 +2,7 @@ package com.DigitalVisionProject.service.controllers;
 
 
 import com.DigitalVisionProject.service.dtos.WishListDTO;
-import com.DigitalVisionProject.service.exceptions.ApiResponse;
-import com.DigitalVisionProject.service.models.Product;
 import com.DigitalVisionProject.service.models.WishList;
-import com.DigitalVisionProject.service.services.UserService;
 import com.DigitalVisionProject.service.services.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

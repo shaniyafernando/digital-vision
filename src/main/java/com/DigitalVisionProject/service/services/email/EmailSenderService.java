@@ -37,4 +37,21 @@ public class EmailSenderService implements EmailSenderServiceImp {
             throw new IllegalStateException("failed to send email");
         }
     }
+
+    @Override
+    @Async
+    public void send(String to, String email) {
+        try{
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,"utf-8");
+            helper.setText(email,true);
+            helper.setTo(to);
+            helper.setSubject("Confirm your Email");
+            helper.setFrom("hello@digitalvision.com");
+            mailSender.send(mimeMessage);
+        }catch(MessagingException e){
+            LOGGER.error("failed to send email", e);
+            throw new IllegalStateException("failed to send email");
+        }
+    }
 }

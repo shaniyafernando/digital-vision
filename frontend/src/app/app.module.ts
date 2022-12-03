@@ -31,22 +31,34 @@ import { RegisterComponent } from "./authentication/register/register.component"
 import { ProductFormComponent } from "./admin-frontend/product-form/product-form.component";
 import { UserPermissionComponent } from "./admin-frontend/user-permission/user-permission.component";
 import { LoginComponent } from "./authentication/login/login.component";
-import { EmailConfirmationComponent } from "./authentication/register/email-confirmation/email-confirmation/email-confirmation.component";
+import { ProductListComponent } from "./common/product-list/product-list.component";
+import { ProductCardComponent } from "./common/product-card/product-card.component";
+import { CartComponent } from "./customer-frontend/cart/cart.component";
+import { DeliveryStatusComponent } from "./customer-frontend/delivery-status/delivery-status.component";
+import { PaymentComponent } from "./customer-frontend/payment/payment.component";
+import { WishListComponent } from "./customer-frontend/wish-list/wish-list.component";
+import { TokenConfirmationComponent } from './authentication/token-confirmation/token-confirmation.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    ProductListComponent,
+    ProductCardComponent,
     ProductDetailComponent,
     ProductFormComponent,
     LoginComponent,
     RegisterComponent,
     UserPermissionComponent,
-    EmailConfirmationComponent,
     ToolbarPublicComponent,
     ToolbarCustomerComponent,
-    ToolbarAdminComponent
+    ToolbarAdminComponent,
+    CartComponent,
+    DeliveryStatusComponent,
+    PaymentComponent,
+    WishListComponent,
+    TokenConfirmationComponent
   ],
   imports: [
     BrowserModule,

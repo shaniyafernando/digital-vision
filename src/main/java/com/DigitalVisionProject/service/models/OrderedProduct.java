@@ -15,14 +15,12 @@ public class OrderedProduct implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne()
-    @JoinColumn(name="product")
+    @OneToOne
     private Product product;
 
     private int quantityBought;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_order_id")
+    @ManyToOne
     private Order order;
 
     public Order getOrder() {

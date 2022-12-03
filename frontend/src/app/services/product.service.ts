@@ -25,7 +25,7 @@ export class ProductService {
   //   return this.http.get<any>(`${this.apiServerUrl}product/search/query`, query);
   // }
   public getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiServerUrl}product/all`);
+    return this.http.get<Product[]>("http://localhost:8080/api/v1/product/all");
   }
 
   public addNewProduct(product: Product): Observable<Product> {

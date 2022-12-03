@@ -1,9 +1,37 @@
-<div fxLayout="column" fxLayoutAlign="center center">
-    <div fxFlex>
-    </div>
-    <div fxFlex>
-        <button mat-flat-button type="submit" color="accent"  class="left-spacing">Save</button>
-        <button mat-flat-button type="button" color="primary" routerLink="/home" style="margin-left: 20px;">Cancel</button>
+<div>
+    <app-toolbar-admin></app-toolbar-admin>
+</div>
+<div style="padding-top: 40px;"></div>
+<div class="container padding-bottom-3x mb-2">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10" style="width: 700px">
+            <h2>Assign permission to a user.</h2>
+            <form class="card mt-4" [formGroup]="permissionForm">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="email-for-pass">Enter user</label>
+                        <select class="form-select form-control" formControlName="user" id="email-for-pass">
+                            <option value="1">user</option>
+                        </select>
+                    </div>
+                    <div style="margin-left: 20px ;">
+                        <div>
+                            <input class="form-check-input" type="radio" value="customer" name="role" formControlName="role" id="permission1" >
+                            <label class="form-check-label pt-1" for="permission1">Customer</label>
+                        </div>
+                        <div>
+                            <input class="form-check-input" type="radio" value="admin" name="role" formControlName="role" id="permission2" >
+                            <label class="form-check-label pt-1" for="permission2">Administrator</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button mat-flat-button type="submit" color="accent"  class="left-spacing">Save</button>
+                    <button mat-flat-button type="button" color="primary" routerLink="/home" style="margin-left: 20px;">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 

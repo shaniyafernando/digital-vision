@@ -14,9 +14,8 @@ import java.util.Map;
 @RequestMapping("api/v1/product")
 public class ProductController {
 
-    final ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
