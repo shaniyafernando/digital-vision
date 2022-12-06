@@ -9,29 +9,27 @@ public class CartItem {
     @Id
     private Long id;
 
-    @OneToOne
-    private Product product;
+    private Long productId;
 
     private int quantityAddedToCart;
-
-    @ManyToOne
-    private Cart cart;
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
 
 
     public CartItem() {
     }
 
-    public CartItem(Long id, Product product, int quantityAddedToCart) {
+    public CartItem(Long productId, int quantityAddedToCart, Long cartId) {
+        this.productId = productId;
+        this.quantityAddedToCart = quantityAddedToCart;
+    }
+
+    public CartItem(Long id, Long productId, int quantityAddedToCart, Long cartId) {
         this.id = id;
-        this.product = product;
+        this.productId = productId;
+        this.quantityAddedToCart = quantityAddedToCart;
+    }
+
+    public CartItem(Long productId, int quantityAddedToCart) {
+        this.productId = productId;
         this.quantityAddedToCart = quantityAddedToCart;
     }
 
@@ -43,12 +41,12 @@ public class CartItem {
         this.id = id;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public int getQuantityAddedToCart() {
@@ -58,4 +56,5 @@ public class CartItem {
     public void setQuantityAddedToCart(int quantityAddedToCart) {
         this.quantityAddedToCart = quantityAddedToCart;
     }
+
 }

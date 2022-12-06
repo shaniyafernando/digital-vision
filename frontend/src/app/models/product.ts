@@ -1,3 +1,4 @@
+
 export interface Product {
   id: number;
   image: string;
@@ -8,4 +9,5 @@ export interface Product {
   brand: string;
   price: number;
   quantity: number;
+
 }

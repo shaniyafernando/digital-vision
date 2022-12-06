@@ -2,7 +2,7 @@ package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.models.Courier;
 import com.DigitalVisionProject.service.models.DeliveryStatus;
-import com.DigitalVisionProject.service.models.OrderStatus;
+import com.DigitalVisionProject.service.models.enums.OrderStatus;
 import com.DigitalVisionProject.service.models.Payment;
 import com.DigitalVisionProject.service.repositories.DeliveryStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ public class DeliveryStatusService {
         this.courierService = courierService;
         this.deliveryStatusRepository= deliveryStatusRepository;
     }
-    public DeliveryStatus addDeliveryStatus (Payment payment){
+    public void addDeliveryStatus (Payment payment){
         DeliveryStatus delivery = new DeliveryStatus();
         delivery.setPaymentId(payment.getId());
         delivery.setStatus(OrderStatus.ORDER_PROCESSING.name());
         delivery.setDate(LocalDate.now());
-        return deliveryStatusRepository.save(delivery);
+        deliveryStatusRepository.save(delivery);
     }
     public DeliveryStatus updateDeliveryStatus (Courier courier ){
         DeliveryStatus deliveryStatus = deliveryStatusRepository.getReferenceById(courier.getDeliveryId());

@@ -17,6 +17,14 @@ export class AuthenticationService {
   public login(userData: UserDTO){
     localStorage.setItem('USER_ROLE', userData.role);
   }
+   
+  public setUserId(userData: UserDTO){
+    localStorage.setItem('USER_ID', userData.id.toString());
+  }
+
+  public getCurrentUser(){
+    return Number(localStorage.getItem('USER_ID'));
+  }
 
   public isLoggedIn(){
     return localStorage.getItem('USER_ROLE') !== null;

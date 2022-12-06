@@ -1,27 +1,44 @@
 package com.DigitalVisionProject.service.models;
 
-import javax.persistence.Entity;
+import com.DigitalVisionProject.service.models.enums.Role;
+
+import javax.persistence.*;
 
 @Entity
-public class Address extends User {
+public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     private String billingAddress;
     private String deliveryAddress;
+    private Long userId;
 
-    public Address() {
-        super();
-    }
 
-    public Address(String billingAddress, String deliveryAddress) {
-        super();
+    public Address() {}
+
+    public Address(Long id, Long userId,String billingAddress, String deliveryAddress) {
+        this.id = id;
+        this.userId = userId;
         this.billingAddress = billingAddress;
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Address(String firstName, String lastName, String email, String password, Role role, String billingAddress, String deliveryAddress) {
-        super(firstName, lastName, email, password, role);
-        this.billingAddress = billingAddress;
-        this.deliveryAddress = deliveryAddress;
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBillingAddress() {

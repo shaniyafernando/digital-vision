@@ -13,6 +13,9 @@ public class Courier implements Serializable {
     private Long deliveryId;
     private String status;
 
+    public Courier() {
+    }
+
     public Courier(Long courierId, Long deliveryId, String status) {
         this.courierId = courierId;
         this.deliveryId = deliveryId;

@@ -6,6 +6,8 @@ import com.DigitalVisionProject.service.repositories.CartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartItemService {
 
@@ -17,8 +19,7 @@ public class CartItemService {
     }
 
     public CartItem addCartItem(CartDTO cartDTO){
-        CartItem cartItem = new CartItem(cartDTO.getUserId(),
-                cartDTO.getProduct(), cartDTO.getQuantityAddedToCart());
+        CartItem cartItem = new CartItem( cartDTO.getProductId(), cartDTO.getQuantityAddedToCart());
         return  cartItemRepository.save(cartItem);
     }
 
@@ -30,5 +31,12 @@ public class CartItemService {
         CartItem item = cartItemRepository.getReferenceById(cartItem.getId());
         item.setQuantityAddedToCart(cartItem.getQuantityAddedToCart());
         return cartItemRepository.save(item);
+    }
+
+    public List<CartItem> getCartItems(List<Long> ids){
+        return cartItemRepository.findAllById(ids);
+    }
+    public CartItem getCartItem(Long id){
+        return cartItemRepository.getReferenceById(id);
     }
 }

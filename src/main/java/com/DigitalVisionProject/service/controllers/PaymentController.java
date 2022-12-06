@@ -1,5 +1,6 @@
 package com.DigitalVisionProject.service.controllers;
 
+import com.DigitalVisionProject.service.dtos.PaymentDTO;
 import com.DigitalVisionProject.service.models.Address;
 import com.DigitalVisionProject.service.models.Payment;
 import com.DigitalVisionProject.service.services.PaymentService;
@@ -29,7 +30,7 @@ public class PaymentController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> pay(@RequestBody Payment payment){
+    public ResponseEntity<?> pay(@RequestBody PaymentDTO payment){
         paymentService.pay(payment);
         return new ResponseEntity<>(HttpStatus.OK);
     }

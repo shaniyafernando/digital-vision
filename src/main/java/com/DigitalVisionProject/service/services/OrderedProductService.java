@@ -18,7 +18,7 @@ public class OrderedProductService {
 
     public OrderedProduct addOrderedProduct(CartItem cartItem){
         OrderedProduct orderedProduct = new OrderedProduct();
-        orderedProduct.setProduct(cartItem.getProduct());
+        orderedProduct.setProductId(cartItem.getProductId());
         orderedProduct.setQuantityBought(cartItem.getQuantityAddedToCart());
         return orderedProductRepository.save(orderedProduct);
     }
@@ -26,6 +26,7 @@ public class OrderedProductService {
     public void removeOrderedProduct(Long id){
         orderedProductRepository.deleteById(id);
     }
+
 
 
 }

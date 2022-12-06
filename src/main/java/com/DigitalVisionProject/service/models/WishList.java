@@ -1,28 +1,46 @@
 package com.DigitalVisionProject.service.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class WishList  extends User{
+@Table(name="wish_list")
+public class WishList {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    @OneToMany
-    private List<Product> products;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER )
+    private List<WishListItem> wishListItems = new ArrayList<>();
+    private Long userId;
 
     public WishList() {
     }
 
-
-    public WishList(Long id, List<Product> products) {
-        super(id);
-        this.products = products;
+    public List<WishListItem> getWishListItems() {
+        return wishListItems;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public void setWishListItems(List<WishListItem> wishListItems) {
+        this.wishListItems = wishListItems;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

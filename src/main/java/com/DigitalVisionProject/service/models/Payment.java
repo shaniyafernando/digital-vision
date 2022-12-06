@@ -1,9 +1,10 @@
 package com.DigitalVisionProject.service.models;
 
+import com.DigitalVisionProject.service.models.enums.PaymentType;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -19,8 +20,8 @@ public class Payment implements Serializable {
 
     private double amount;
 
-    @OneToOne
-    private Order order;
+
+    private Long  orderId;
 
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
@@ -30,19 +31,19 @@ public class Payment implements Serializable {
     public Payment() {
     }
 
-    public Payment(LocalDate date, double amount, Order order, PaymentType paymentType, UUID invoiceNumber) {
+    public Payment(Long id, LocalDate date, double amount, Long orderId, PaymentType paymentType, UUID invoiceNumber) {
+        this.id = id;
         this.date = date;
         this.amount = amount;
-        this.order = order;
+        this.orderId = orderId;
         this.paymentType = paymentType;
         this.invoiceNumber = invoiceNumber;
     }
 
-    public Payment(Long id, LocalDate date, double amount, Order order, PaymentType paymentType, UUID invoiceNumber) {
-        this.id = id;
+    public Payment(LocalDate date, double amount, Long orderId, PaymentType paymentType, UUID invoiceNumber) {
         this.date = date;
         this.amount = amount;
-        this.order = order;
+        this.orderId = orderId;
         this.paymentType = paymentType;
         this.invoiceNumber = invoiceNumber;
     }
@@ -71,12 +72,20 @@ public class Payment implements Serializable {
         this.amount = amount;
     }
 
-    public Order getOrder() {
-        return order;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setInvoiceNumber(UUID invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public UUID getInvoiceNumber() {
+        return UUID.randomUUID();
     }
 
     public PaymentType getPaymentType() {
@@ -87,11 +96,5 @@ public class Payment implements Serializable {
         this.paymentType = paymentType;
     }
 
-    public UUID getInvoiceNumber() {
-        return UUID.randomUUID();
-    }
 
-    public void setInvoiceNumber() {
-        this.invoiceNumber = getInvoiceNumber();
-    }
 }

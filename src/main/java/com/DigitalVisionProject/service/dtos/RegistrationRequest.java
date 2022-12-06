@@ -7,25 +7,32 @@ import lombok.ToString;
 @ToString
 public class RegistrationRequest {
 
-    private final String firstName;
-    private final String lastName;
+    private final String username;
     private final String email;
     private final String password;
 
+    private final String billingAddress;
+    private final String deliveryAddress;
 
-    public RegistrationRequest(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public RegistrationRequest( String username, String email, String password, String billingAddress, String deliveryAddress) {
+        this.username = username;
         this.email = email;
         this.password = password;
+        this.billingAddress = billingAddress;
+        this.deliveryAddress = deliveryAddress;
     }
 
-    public String getFirstName() {
-        return firstName;
+
+    public String getUsername() {
+        return username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getBillingAddress() {
+        return billingAddress;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
     public String getEmail() {

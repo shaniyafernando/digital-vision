@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,28 +17,47 @@ public class OrderConfirmationEmailService {
 
     private final UserRepository userRepository;
 
+    private final OrderRepository orderRepository;
+    private final OrderedProductRepository orderedProductRepository;
+
+    private final ProductRepository productRepository;
+
     @Autowired
-    public OrderConfirmationEmailService(EmailSenderService emailSenderService, UserRepository userRepository){
+    public OrderConfirmationEmailService(EmailSenderService emailSenderService,
+                                         UserRepository userRepository,
+                                         OrderRepository orderRepository,
+                                         OrderedProductRepository orderedProductRepository, ProductRepository productRepository){
         this.emailSenderService = emailSenderService;
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.orderedProductRepository = orderedProductRepository;
+        this.productRepository = productRepository;
     }
 
 
     public void sendOrderConfirmationEmail(Payment payment){
         String body = buildOrderConfirmationEmailBody(payment);
         String subject = "Digital Vision: Order Confirmation";
-        User user = userRepository.getReferenceById(payment.getOrder().getUserId());
+
+        Order order = orderRepository.getReferenceById(payment.getOrderId());
+        User user = userRepository.getReferenceById(order.getUserId());
+
         emailSenderService.send(subject, user.getEmail(), body);
     }
 
     public String buildOrderConfirmationEmailBody(Payment payment){
         String body = "";
         String header = addHeaderToEmailBody();
-        User user = userRepository.getReferenceById(payment.getOrder().getUserId());
+
+        Order order = orderRepository.getReferenceById(payment.getOrderId());
+        User user = userRepository.getReferenceById(order.getUserId());
+
         String invoiceDetails = addInvoiceNoAndDateOfPurchaseIoToEmailBody(payment.getInvoiceNumber(),
-                payment.getDate(), user.getFirstName() + "" + user.getLastName());
-        String productsInInvoice = addProductsIoInvoiceToEmailBody(payment.getOrder().getOrderProducts(),
-                payment.getOrder().getDeliveryFee());
+                payment.getDate(), user.getUsername());
+
+        String productsInInvoice = addProductsIoInvoiceToEmailBody(order.getOrderProducts(),
+                order.getDeliveryFee());
+
         String totalAmount = addTotalAmountInInvoiceToEmailBody(payment.getAmount());
         return body + header + invoiceDetails + productsInInvoice + totalAmount;
     }
@@ -77,7 +97,7 @@ public class OrderConfirmationEmailService {
     public String addProductsIoInvoiceToEmailBody(List<OrderedProduct> orderedProducts, double deliveryFee){
         String productRecords = "";
         for (OrderedProduct orderedProduct: orderedProducts) {
-            Product product = orderedProduct.getProduct();
+            Product product = productRepository.getReferenceById(orderedProduct.getProductId());
             String productRecord = "<tr>\n" +
                     "<td>\n" + product.getTitle() +"</td>\n" +
                     "<td style=\"text-align: right;vertical-align: top;\">\n" +"$"+ product.getPrice()+"</td>\n" +

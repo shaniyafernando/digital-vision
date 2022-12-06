@@ -1,34 +1,34 @@
 package com.DigitalVisionProject.service.models;
 
+import com.DigitalVisionProject.service.models.enums.Role;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User{
     @Id
     @SequenceGenerator(name="user_sequence",sequenceName = "user_sequence",allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_sequence")
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String username;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(Long id, String firstName, String lastName, String email, String password, Role role) {
+
+    public User(Long id, String username, String email, String password, Role role) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username, String email, String password, Role role) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -50,20 +50,12 @@ public class User{
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -89,4 +81,7 @@ public class User{
     public void setRole(Role role) {
         this.role = role;
     }
+
+
+
 }

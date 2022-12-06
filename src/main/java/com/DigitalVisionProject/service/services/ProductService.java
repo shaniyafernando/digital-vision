@@ -1,13 +1,16 @@
 package com.DigitalVisionProject.service.services;
 
+import com.DigitalVisionProject.service.dtos.SearchDTO;
 import com.DigitalVisionProject.service.models.Product;
+import com.DigitalVisionProject.service.models.enums.Category;
 import com.DigitalVisionProject.service.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.DigitalVisionProject.service.models.enums.Category.*;
 
 @Service
 public class ProductService {
@@ -19,16 +22,41 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public Category getCategoryType(String number){
+        int i = Integer.parseInt(number);
+
+        if(Category.STANDS.ordinal() == i){
+            return Category.STANDS;
+        }
+
+        if(Category.AUTOMOBILE_GRADLE.ordinal() == i){
+            return Category.AUTOMOBILE_GRADLE;
+        }
+
+        if(Category.GRIPS.ordinal() == i){
+            return Category.GRIPS;
+        }
+
+        if(Category.HANDHELD_GIMBALS_AND_STABILIZERS.ordinal() == i){
+            return Category.HANDHELD_GIMBALS_AND_STABILIZERS;
+        }
+
+        if(Category.SCREEN_EXPANDERS_AND_MAGNIFIERS.ordinal() == i){
+            return Category.SCREEN_EXPANDERS_AND_MAGNIFIERS;
+        }
+        return Category.ALL;
+    }
 
     public Product addNewProduct(Product product){
         Product newProduct = new Product();
 
-        newProduct.setTitle(product.getTitle().toLowerCase());
-        newProduct.setDescription(product.getDescription().toLowerCase());
-        newProduct.setImage(product.getImage().toLowerCase());
-        newProduct.setCategory(product.getCategory().toLowerCase());
-        newProduct.setBrand(product.getBrand().toLowerCase());
-        newProduct.setColour(product.getColour().toLowerCase());
+        newProduct.setTitle(product.getTitle());
+        newProduct.setDescription(product.getDescription());
+        newProduct.setImage(product.getImage());
+        Category type = getCategoryType(product.getCategory());
+        newProduct.setCategory(type.name());
+        newProduct.setBrand(product.getBrand());
+        newProduct.setColour(product.getColour());
         newProduct.setPrice(product.getPrice());
         newProduct.setQuantity(product.getQuantity());
 
@@ -43,7 +71,8 @@ public class ProductService {
         product.setImage(updatedProduct.getImage());
         product.setBrand(updatedProduct.getBrand());
         product.setColour(updatedProduct.getColour());
-        product.setCategory(updatedProduct.getCategory());
+        Category type = getCategoryType(updatedProduct.getCategory());
+        product.setCategory(type.name());
         product.setPrice(updatedProduct.getPrice());
         product.setQuantity(updatedProduct.getQuantity());
 
@@ -58,49 +87,35 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> getAllProductsBySearchQuery(String query){
+    public List<Product> getAllProducts(String query){
         List<Product> productList = productRepository.findAll();
+        return productList.stream().filter(product ->
+            product.getTitle().equals(query) || product.getDescription().equals(query)
+                    || product.getColour().equals(query) || product.getBrand().equals(query)
+        ).collect(Collectors.toList());
+    }
 
-        Set<Long> productIds = new HashSet<>();
 
-        for(Product product : productList){
-            if(product.getTitle().contains(query.toLowerCase())){
-                productIds.add(product.getId());
-            }
-            if(product.getDescription().contains(query.toLowerCase())){
-                productIds.add(product.getId());
-            }
-            if(product.getColour().contains(query.toLowerCase())){
-                productIds.add(product.getId());
-            }
-            if(product.getBrand().contains(query.toLowerCase())){
-                productIds.add(product.getId());
-            }
+    public List<Product> filterAllProducts(SearchDTO searchDTO){
+        List<Product> products = filterAllProductsByCategoryType(searchDTO.getType());
+        return filterAllProductsByPriceRange(searchDTO.getMinPrice(), searchDTO.getMaxPrice(), products);
+    }
+
+    public List<Product> filterAllProductsByPriceRange(double minPrice, double maxPrice, List<Product> products){
+        return products.stream().filter(product -> product.getPrice() <= maxPrice && product.getPrice() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> filterAllProductsByCategoryType(String categoryType){
+        List<Product> products = productRepository.findAll();
+        Category type = getCategoryType(categoryType);
+        List<Product>  filteredProducts = products.stream().filter(product ->
+                product.getCategory().contains(type.name())).toList();
+
+        if(filteredProducts.isEmpty()){
+            return products;
         }
-
-        return productRepository.findAllById(new ArrayList<>(productIds));
-    }
-
-    public List<Product> getAllProductsByPriceRange(double minPrice, double maxPrice){
-        List<Product> products = productRepository.findAll();
-        List<Long> productIds = new ArrayList<>();
-        products.forEach(product -> {
-            if(product.getPrice() >= minPrice && product.getPrice() <= maxPrice){
-                productIds.add(product.getId());
-            }
-        });
-        return productRepository.findAllById(productIds);
-    }
-
-    public List<Product> getAllProductsByCategory(String categoryType){
-        List<Product> products = productRepository.findAll();
-        List<Long> productIds = new ArrayList<>();
-        products.forEach(product -> {
-            if(product.getCategory().contains(categoryType.toLowerCase())){
-                productIds.add(product.getId());
-            }
-        });
-        return productRepository.findAllById(productIds);
+        return filteredProducts;
     }
 
 }

@@ -16,7 +16,7 @@
                 </div>
                 <div class="child-conatiner padding">
                     <h4 class="pro-d-title">
-                        {{finalProduct.title}}
+                        <b>{{finalProduct.title}}</b>
                     </h4>
                     <p>
                         {{finalProduct.description}}
@@ -35,7 +35,7 @@
                     
                     <strong>Price : 
                         <span class="pro-price"> 
-                        {{finalProduct.price}}
+                        ${{finalProduct.price}}.00
                         </span>
                     </strong>
                     
@@ -45,25 +45,26 @@
                         {{finalProduct.quantity}}
                         </span>
                     </strong>
-                    <div class="column-container">
-                        <form [formGroup]="quantityForm" (ngSubmit)="onSubmit()" *ngIf="showQuantityFormField">
-                            <mat-form-field appearance="fill" color="accent" class="quantity" floatLabel="always">
-                                <mat-label>Quantity</mat-label>
-                                <input matInput type="quantity" placeholder="1">
-                            </mat-form-field>
-                            <button mat-flat-button color="primary" type="submit" class="button-spacing">Add to cart</button>
-                        </form>   
-                    <button mat-flat-button color="primary"  type="submit" class="button-spacing" *ngIf="showAddToWishListButton">Add to wish list</button>
-                    <button mat-flat-button  color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton">Remove product from Wish List</button>
-                    <button mat-flat-button color="primary" type="button" *ngIf="showGoBackButton" (click)="navigateToPreviousPage(finalComponent)" class="go-back-button">Go back</button>
-                    </div>
+                    
                 </div> 
+            </div>
+            <div class="column-container">
+                <form [formGroup]="quantityForm" (ngSubmit)="onSubmit()" *ngIf="showQuantityFormField">
+                    <mat-form-field appearance="outline" color="accent" class="quantity" >
+                        <mat-label>Quantity</mat-label>
+                        <input matInput type="quantity" placeholder="Enter quantity" formControlName="quantity">
+                    </mat-form-field><br>
+                    <button mat-flat-button color="accent" type="submit" class="button-spacing">Add to cart</button>
+                </form>   
+            <button mat-flat-button color="accent"  type="submit" class="button-spacing" *ngIf="showAddToWishListButton" (click)="onAddToWishList(finalProduct.id)">Add to wish list</button>
+            <button mat-flat-button  color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton">Remove product from Wish List</button>
+            <button mat-flat-button color="primary" type="button" *ngIf="showGoBackButton" (click)="navigateToPreviousPage(finalComponent)" class="go-back-button">Go back</button>
             </div>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-flat-button color="accent" type="submit" *ngIf="showEditActionButton" (click)="navigateToProductForm(finalProduct)">Edit</button>
+            <button mat-flat-button color="accent" type="button" *ngIf="showEditActionButton" (click)="openDialog(finalProduct)">Edit</button>
             <button mat-flat-button color="warn" type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" (click)="deleteProduct(finalProduct.id)" >Delete</button>
-            <button mat-flat-button color="primary" type="submit"  *ngIf="showDeleteActionButton" class="left-spacing" routerLink="/home" >Cancel</button>
+            <button mat-flat-button color="primary" type="button"  *ngIf="showDeleteActionButton" class="left-spacing" routerLink="/home" >Cancel</button>
         </mat-card-actions>
     </mat-card>
 </div>

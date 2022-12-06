@@ -1,9 +1,12 @@
 package com.DigitalVisionProject.service.models;
 
+import com.DigitalVisionProject.service.models.enums.Category;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -19,10 +22,11 @@ public class Product implements Serializable {
     private String category;
     private String colour;
     private String brand;
-    private double price;
+    private int price;
     private int quantity;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "wish_list_id")
     private WishList wishList;
 
     public WishList getWishList() {
@@ -33,9 +37,10 @@ public class Product implements Serializable {
         this.wishList = wishList;
     }
 
+
     public Product() {}
     public Product(Long id, String image, String title, String description, String colour,
-                   String brand,String category, double price, int quantity) {
+                   String brand,String category, int price, int quantity) {
         this.id = id;
         this.image = image;
         this.title = title;
@@ -47,7 +52,7 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
     public Product(String image, String title, String description, String colour, String brand
-            ,String category, double price, int quantity) {
+            ,String category, int price, int quantity) {
         this.image = image;
         this.title = title;
         this.description = description;
@@ -57,7 +62,6 @@ public class Product implements Serializable {
         this.price = price;
         this.quantity = quantity;
     }
-
     public Long getId() {
         return id;
     }
@@ -114,11 +118,11 @@ public class Product implements Serializable {
         this.category = category;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

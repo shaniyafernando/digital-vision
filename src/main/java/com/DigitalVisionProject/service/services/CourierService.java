@@ -3,7 +3,7 @@ package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.models.Courier;
 import com.DigitalVisionProject.service.models.DeliveryStatus;
-import com.DigitalVisionProject.service.models.OrderStatus;
+import com.DigitalVisionProject.service.models.enums.OrderStatus;
 import com.DigitalVisionProject.service.repositories.CourierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

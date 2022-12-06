@@ -1,4 +1,4 @@
-package com.DigitalVisionProject.service.models;
+package com.DigitalVisionProject.service.models.enums;
 
 public enum PaymentType {
     CREDIT, PAYPAL

@@ -1,5 +1,6 @@
 package com.DigitalVisionProject.service.controllers;
 
+import com.DigitalVisionProject.service.dtos.PlaceOrderDTO;
 import com.DigitalVisionProject.service.models.Cart;
 import com.DigitalVisionProject.service.models.Order;
 import com.DigitalVisionProject.service.services.OrderService;
@@ -22,19 +23,10 @@ public class OrderController {
     }
 
     @PostMapping()
-    public ResponseEntity<Order> checkout(@RequestBody Cart cart){
-        Order newOrder = orderService.addOrderDetails(cart);
+    public ResponseEntity<PlaceOrderDTO> checkout(@RequestBody Cart cart){
+        PlaceOrderDTO newOrder = orderService.addOrderDetails(cart);
         return new ResponseEntity<>(newOrder,HttpStatus.OK);
     }
-
-//    @PostMapping("/list")
-//    public ResponseEntity<OrderListDTO> getOrderDetails(@RequestBody Map<String, Object> payload){
-//        int id = (int) payload.get("id");
-//        System.out.println(id);
-//        OrderListDTO orders = orderService.getOrders((long) id);
-//        System.out.println(orders);
-//        return new ResponseEntity<>(orders,HttpStatus.OK);
-//    }
 
     @PostMapping("/one")
     public ResponseEntity<Order> getOrderList(@RequestBody Map<String, Object> payload){
@@ -51,9 +43,4 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/placeOrder")
-    public ResponseEntity<Order> placeOrder(@RequestBody Order order){
-        Order placedOrder = orderService.placeOrder(order);
-        return new ResponseEntity<>(placedOrder,HttpStatus.OK);
-    }
 }

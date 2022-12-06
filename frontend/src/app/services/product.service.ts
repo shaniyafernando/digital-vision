@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { SearchDTO } from '../dtos/SearchDTO';
 import { Product } from '../models/product';
 
 
@@ -12,32 +10,36 @@ import { Product } from '../models/product';
 })
 export class ProductService {
 
-  private apiServerUrl = environment.baseServerUrl;
+  
+
 
   constructor(private http: HttpClient) { }
 
 
-  // public getAllProducts(searchDTO: SearchDTO): Observable<any> {
-  //   return this.http.get(`${this.apiServerUrl}product/search/all`, searchDTO);
-  // }
+  public filterAllProducts(type:String, minPrice:number, maxPrice: number): Observable<Product[]> {
+    return this.http.get<Product[]>(`http://localhost:8080/api/v1/product/all/${type}/${minPrice}/${maxPrice}`);
+  }
 
-  // public getAllProductsByQuery(query: String): Observable<any> {
-  //   return this.http.get<any>(`${this.apiServerUrl}product/search/query`, query);
-  // }
+  public getAllProductsByQuery(query: String): Observable<Product[]> {
+    return this.http.get<Product[]>(`http://localhost:8080/api/v1/product/all/${query}`);
+  }
+
   public getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>("http://localhost:8080/api/v1/product/all");
   }
 
   public addNewProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.apiServerUrl}product`, product);
+    return this.http.post<Product>(`http://localhost:8080/api/v1/product`, product);
   }
 
   public updateProduct(product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiServerUrl}product`, product);
+    return this.http.put<Product>(`http://localhost:8080/api/v1/product`, product);
   }
 
-  public deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiServerUrl}/product/${id}`);
+  public deleteProduct(id: number): Observable<any> {
+    return this.http.delete(`http://localhost:8080/api/v1/product/${id}`);
   }
+
+  
 
 }

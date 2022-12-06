@@ -1,8 +1,8 @@
 package com.DigitalVisionProject.service.controllers;
 
+import com.DigitalVisionProject.service.dtos.SearchDTO;
 import com.DigitalVisionProject.service.models.Product;
 import com.DigitalVisionProject.service.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public  ResponseEntity<Product> addProduct(@RequestBody Product product){
+    public  ResponseEntity<Product> addNewProduct(@RequestBody Product product){
         Product newProduct = productService.addNewProduct(product);
         return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
@@ -33,32 +33,25 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") @RequestBody Long id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/all/search")
-    public  ResponseEntity<List<Product>> getAllProductsBySearchQuery(@RequestBody Map<String, Object> payload){
-        String query = (String) payload.get("query");
-        List<Product> products = productService.getAllProductsBySearchQuery(query);
+    @GetMapping("/all/{type}/{minPrice}/{maxPrice}")
+    public  ResponseEntity<List<Product>> filterAllProducts(
+            @PathVariable("type") String type, @PathVariable("minPrice") double minPrice,@PathVariable("maxPrice") double maxPrice ){
+        SearchDTO searchDTO = new SearchDTO(minPrice, maxPrice, type);
+        List<Product> products = productService.filterAllProducts(searchDTO);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/all/price-range")
-    public  ResponseEntity<List<Product>> getAllProductsByPriceRange(@RequestBody Map<String, Object> payload){
-        double minPrice = (double) payload.get("minPrice");
-        double maxPrice = (double) payload.get("maxPrice");
-        List<Product> products = productService.getAllProductsByPriceRange(minPrice, maxPrice);
+    @GetMapping("/all/{query}")
+    public  ResponseEntity<List<Product>> filterAllProducts( @PathVariable("query") String query ){
+        List<Product> products = productService.getAllProducts(query);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/all/category-type")
-    public  ResponseEntity<List<Product>> getAllProductsByCategory(@RequestBody Map<String, Object> payload){
-        String category = (String) payload.get("category");
-        List<Product> products = productService.getAllProductsByCategory(category);
-        return new ResponseEntity<>(products, HttpStatus.OK);
-    }
 
     @GetMapping("/all")
     public  ResponseEntity<List<Product>> getAllProducts(){

@@ -1,9 +1,13 @@
 import { Component,  OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ProductFormComponent } from 'src/app/admin-frontend/product-form/product-form.component';
+import { WishListDTO } from 'src/app/dtos/WishListDTO';
 import { Product } from 'src/app/models/product';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProductService } from 'src/app/services/product.service';
+import { WishListService } from 'src/app/services/wish-list.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,28 +26,34 @@ export class ProductDetailComponent implements OnInit {
 
   data!:any;
 
-  finalProduct!: Product;
-  finalComponent!: String;
-  quantityForm!: FormGroup;
+  finalProduct: Product = {} as Product;
+  finalComponent: String = "";
+  quantityForm= new FormGroup({
+    quantity: new FormControl(1,[Validators.required])
+  })
   loggedIn: boolean = false;
   userIsAdmin: boolean = false;
+  wishlistdto: WishListDTO = {} as WishListDTO;
+  currentUserId: number = 1;
 
-  constructor(private router: Router, private productService: ProductService, private fb : FormBuilder,
-    private authenticationService : AuthenticationService) { }
+  constructor(private router: Router, private productService: ProductService, 
+    private authenticationService : AuthenticationService, public dialog: MatDialog,
+    private wishlistService: WishListService) { 
+       this.currentUserId = this.authenticationService.getCurrentUser();
+    }
 
   ngOnInit(): void {
     this.data = history.state.data;
     this.finalProduct = this.data.product;
     this.finalComponent = this.data.component;
-    this.fb.group({
-      quantity: new FormControl(0,[Validators.required])
-    });
     this.grantAccessToButtons();
   }
 
   private grantAccessToButtons(): void{
-    this.userIsAdmin = this.authenticationService.userRoleIsAdmin();
-    this.loggedIn = this.authenticationService.isLoggedIn();
+    this.userIsAdmin = false;
+    // this.authenticationService.userRoleIsAdmin();
+    this.loggedIn = true;
+    // this.authenticationService.isLoggedIn();
 
     if(this.userIsAdmin && this.loggedIn){
 
@@ -91,6 +101,17 @@ export class ProductDetailComponent implements OnInit {
 
   public onSubmit(){}
 
+  openDialog(product: Product): void {
+    const dialogRef = this.dialog.open(ProductFormComponent, {
+      width: '1000px',
+      data: {product: product, action:"Edit"},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed with result: ' + result);
+      this.router.navigate(['/home']);
+    });
+  }
 
   public navigateToPreviousPage(component:String):void{
     if(component == 'ProductListComponent'){
@@ -106,12 +127,22 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  public navigateToProductForm(product:Product){
-      this.router.navigate(['/product-form'], {state: {data: {title:'Edit product',product: product}}});
+  public deleteProduct(id: number){
+      console.log(id);
+      this.productService.deleteProduct(id).subscribe(
+        response => console.log(response)
+      );
+      this.router.navigate(['/home']);
   }
 
-  public deleteProduct(id:number){
-      this.productService.deleteProduct(id);
+  public onAddToWishList(productId: number){
+
+    this.wishlistdto.userId = 1;
+    this.wishlistdto.productId = productId;
+    console.log(this.wishlistdto);
+    this.wishlistService.addToWishList(this.wishlistdto).subscribe(
+      response => console.log(response)
+    );
   }
 
 

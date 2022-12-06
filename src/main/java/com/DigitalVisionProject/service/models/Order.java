@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -16,8 +18,9 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
-    private List<OrderedProduct> orderProducts;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "order_id")
+    private List<OrderedProduct> orderProducts = new ArrayList<>();
 
     private Long userId;
 
@@ -25,7 +28,7 @@ public class Order implements Serializable {
 
     private double subTotal;
 
-    private double deliveryFee;
+    private int deliveryFee;
 
     public Order() {}
 
@@ -47,14 +50,6 @@ public class Order implements Serializable {
         this.date = date;
     }
 
-    public List<OrderedProduct> getOrderProducts() {
-        return orderProducts;
-    }
-
-    public void setOrderProducts(List<OrderedProduct> orderProducts) {
-        this.orderProducts = orderProducts;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -71,11 +66,22 @@ public class Order implements Serializable {
         this.subTotal = subTotal;
     }
 
-    public double getDeliveryFee() {
-        return 150.00;
+    public int getDeliveryFee() {
+        return 150;
     }
 
-    public void setDeliveryFee() {
-        this.deliveryFee = getDeliveryFee();
+    public List<OrderedProduct> getOrderProducts() {
+        return orderProducts;
     }
+
+    public void setOrderProducts(List<OrderedProduct> orderProducts) {
+        this.orderProducts = orderProducts;
+    }
+
+
+    public void setDeliveryFee(int deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+
 }

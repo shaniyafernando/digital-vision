@@ -1,5 +1,6 @@
 package com.DigitalVisionProject.service.services;
 
+import com.DigitalVisionProject.service.dtos.PlaceOrderDTO;
 import com.DigitalVisionProject.service.models.*;
 import com.DigitalVisionProject.service.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderedProductRepository orderedProductRepository;
     private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
 
     private final CartService cartService;
 
@@ -27,31 +29,41 @@ public class OrderService {
     public OrderService(AddressRepository addressRepository, ProductRepository productRepository,
                         OrderRepository orderRepository, OrderedProductRepository orderedProductRepository,
                         CartRepository cartRepository,
-                        CartService cartService, PaymentService paymentService) {
+                        CartItemRepository cartItemRepository, CartService cartService, PaymentService paymentService) {
         this.addressRepository = addressRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderedProductRepository = orderedProductRepository;
         this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
         this.cartService = cartService;
         this.paymentService = paymentService;
     }
 
 
-    public Order addOrderDetails(Cart cart){
+    public PlaceOrderDTO addOrderDetails(Cart cart){
         Order newOrder = new Order();
         List<OrderedProduct> orderedProducts = new ArrayList<>();
-        cart.getCartItems().forEach(item ->
-        {
+        cart.getCartItems().forEach(item ->{
             OrderedProduct orderedProduct = new OrderedProduct();
-            orderedProduct.setProduct(item.getProduct());
+            orderedProduct.setProductId(item.getProductId());
             orderedProduct.setQuantityBought(item.getQuantityAddedToCart());
-            orderedProducts.add(orderedProduct);
+            OrderedProduct savedOrderedProduct = orderedProductRepository.save(orderedProduct);
+            orderedProducts.add(savedOrderedProduct);
+
+
+            Product product = productRepository.getReferenceById(item.getProductId());
+            int updateInventory = product.getQuantity() - item.getQuantityAddedToCart();
+            product.setQuantity(updateInventory);
         });
+
         newOrder.setOrderProducts(orderedProducts);
         newOrder.setSubTotal(cart.getTotal());
-        newOrder.setUserId(cart.getId());
-        return orderRepository.save(newOrder);
+        newOrder.setDeliveryFee(20);
+        newOrder.setUserId(cart.getUserId());
+        newOrder.setDate(LocalDate.now());
+        Order order = orderRepository.save(newOrder);
+        return new PlaceOrderDTO(order.getId(), cart.getId());
     }
 
     public Order getOrderById(Long id){
@@ -60,14 +72,15 @@ public class OrderService {
 
 
     public void updateDeliveryAddressOfOrder(Long userId, String deliveryAddress){
-        Address user = addressRepository.getReferenceById(userId);
+        Address user = (Address) addressRepository.findAll().stream().filter(address -> address.getUserId().equals(userId));
         user.setDeliveryAddress(deliveryAddress);
         addressRepository.save(user);
     }
 
-    public Order placeOrder(Order order){
-        Order orderPlaced = orderRepository.getReferenceById(order.getId());
-        orderPlaced.setDate(LocalDate.now());
-        return orderRepository.save(order);
+    public String getDeliveryAddress(Long userId){
+        Address user = (Address) addressRepository.findAll().stream().filter(address -> address.getUserId().equals(userId));
+        return user.getDeliveryAddress();
     }
+
+
 }
