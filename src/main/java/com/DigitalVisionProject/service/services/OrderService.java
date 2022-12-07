@@ -17,27 +17,19 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final OrderedProductRepository orderedProductRepository;
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
 
-    private final CartService cartService;
-
-    private final PaymentService paymentService;
+    private final UserRepository userRepository;
 
 
     @Autowired
     public OrderService(AddressRepository addressRepository, ProductRepository productRepository,
                         OrderRepository orderRepository, OrderedProductRepository orderedProductRepository,
-                        CartRepository cartRepository,
-                        CartItemRepository cartItemRepository, CartService cartService, PaymentService paymentService) {
+                        UserRepository userRepository) {
         this.addressRepository = addressRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderedProductRepository = orderedProductRepository;
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.cartService = cartService;
-        this.paymentService = paymentService;
+        this.userRepository = userRepository;
     }
 
 
@@ -60,7 +52,11 @@ public class OrderService {
         newOrder.setOrderProducts(orderedProducts);
         newOrder.setSubTotal(cart.getTotal());
         newOrder.setDeliveryFee(20);
-        newOrder.setUserId(cart.getUserId());
+
+        User user = (User) userRepository.findAll().stream().filter(
+                user1 -> user1.getCartId().equals(cart.getId()));
+        newOrder.setUserId(user.getId());
+
         newOrder.setDate(LocalDate.now());
         Order order = orderRepository.save(newOrder);
         return new PlaceOrderDTO(order.getId(), cart.getId());
@@ -72,13 +68,15 @@ public class OrderService {
 
 
     public void updateDeliveryAddressOfOrder(Long userId, String deliveryAddress){
-        Address user = (Address) addressRepository.findAll().stream().filter(address -> address.getUserId().equals(userId));
+        Address user = (Address) addressRepository.findAll().stream().filter(
+                address -> address.getUserId().equals(userId));
         user.setDeliveryAddress(deliveryAddress);
         addressRepository.save(user);
     }
 
     public String getDeliveryAddress(Long userId){
-        Address user = (Address) addressRepository.findAll().stream().filter(address -> address.getUserId().equals(userId));
+        Address user = (Address) addressRepository.findAll().stream().filter(
+                address -> address.getUserId().equals(userId));
         return user.getDeliveryAddress();
     }
 

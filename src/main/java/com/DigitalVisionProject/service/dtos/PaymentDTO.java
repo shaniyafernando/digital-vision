@@ -5,15 +5,15 @@ public class PaymentDTO {
 
     private int amount;
 
-    private Long cartId;
+    private Long userId;
 
     private Long  orderId;
 
     private String paymentType;
 
-    public PaymentDTO(int amount, Long cartId, Long orderId, String paymentType) {
+    public PaymentDTO(int amount, Long userId, Long orderId, String paymentType) {
         this.amount = amount;
-        this.cartId = cartId;
+        this.userId = userId;
         this.orderId = orderId;
         this.paymentType = paymentType;
     }
@@ -26,12 +26,12 @@ public class PaymentDTO {
         this.amount = amount;
     }
 
-    public Long getCartId() {
-        return cartId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getOrderId() {

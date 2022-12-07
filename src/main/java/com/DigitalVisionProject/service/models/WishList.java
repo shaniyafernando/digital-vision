@@ -14,7 +14,7 @@ public class WishList {
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER )
     private List<WishListItem> wishListItems = new ArrayList<>();
-    private Long userId;
+
 
     public WishList() {
     }
@@ -35,12 +35,4 @@ public class WishList {
         this.id = id;
     }
 
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }

@@ -43,4 +43,10 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getDeliveryAddressOfOrder(@PathVariable("id") Long id){
+        String address = orderService.getDeliveryAddress(id);
+        return new ResponseEntity<>(address ,HttpStatus.OK);
+    }
+
 }

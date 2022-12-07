@@ -17,21 +17,19 @@ import java.util.UUID;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final AddressRepository addressRepository;
-    private final CartItemRepository cartItemRepository;
-    private final CartRepository cartRepository;
     private final OrderConfirmationEmailService orderConfirmationEmailService;
 
+    private final CartService cartService;
     private final DeliveryStatusService deliveryStatusService;
     @Autowired
     public PaymentService(PaymentRepository paymentRepository,
                           AddressRepository addressRepository,
-                          CartItemRepository cartItemRepository, CartRepository cartRepository, OrderConfirmationEmailService orderConfirmationEmailService,
-                          DeliveryStatusService deliveryStatusService) {
+                          OrderConfirmationEmailService orderConfirmationEmailService,
+                          CartService cartService, DeliveryStatusService deliveryStatusService) {
         this.paymentRepository = paymentRepository;
         this.addressRepository = addressRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.cartRepository = cartRepository;
         this.orderConfirmationEmailService = orderConfirmationEmailService;
+        this.cartService = cartService;
         this.deliveryStatusService = deliveryStatusService;
     }
 
@@ -50,16 +48,14 @@ public class PaymentService {
         Payment newPayment = new Payment(
                 LocalDate.now(),
                 payment.getAmount(),
+                payment.getUserId(),
                 payment.getOrderId(),
                 PaymentType.valueOf(payment.getPaymentType()),
                 UUID.randomUUID()
         );
         Payment savedPayment = paymentRepository.save(newPayment);
 
-        Cart cart = cartRepository.getReferenceById(payment.getCartId());
-        cartItemRepository.deleteAll(cart.getCartItems());
-        cartRepository.delete(cart);
-
+        cartService.deleteCart(savedPayment.getUserId());
         orderConfirmationEmailService.sendOrderConfirmationEmail(savedPayment);
         deliveryStatusService.addDeliveryStatus(savedPayment);
     }

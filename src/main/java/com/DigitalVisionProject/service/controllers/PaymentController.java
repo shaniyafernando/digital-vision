@@ -35,4 +35,10 @@ public class PaymentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getBillingAddressOfOrder(@PathVariable("id") Long id){
+        String address = paymentService.getBillingAddress(id);
+        return new ResponseEntity<>(address ,HttpStatus.OK);
+    }
+
 }

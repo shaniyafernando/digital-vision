@@ -19,11 +19,9 @@ public class DeliveryStatusController {
         this.deliveryStatusService = deliveryStatusService;
    }
 
-
-
-    @PutMapping()
-    public  ResponseEntity<DeliveryStatus> updateStatus(@RequestBody Courier courier){
-        DeliveryStatus updateStatus = deliveryStatusService.updateDeliveryStatus(courier);
+    @GetMapping("/userId")
+    public  ResponseEntity<DeliveryStatus> getDeliveryStatus(@PathVariable("id") Long id){
+        DeliveryStatus updateStatus = deliveryStatusService.getDeliveryStatus(id);
         return new ResponseEntity<>(updateStatus, HttpStatus.OK);
     }
 

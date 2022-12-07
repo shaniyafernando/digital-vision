@@ -18,7 +18,6 @@ public class Cart {
 
     private int total;
 
-    private Long userId;
 
 
     public Cart() {
@@ -51,12 +50,5 @@ public class Cart {
         this.total = total;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
 }

@@ -2,6 +2,7 @@ package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.dtos.CartDTO;
 import com.DigitalVisionProject.service.models.CartItem;
+import com.DigitalVisionProject.service.models.Product;
 import com.DigitalVisionProject.service.repositories.CartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class CartItemService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public CartItem addCartItem(CartDTO cartDTO){
-        CartItem cartItem = new CartItem( cartDTO.getProductId(), cartDTO.getQuantityAddedToCart());
+    public CartItem addCartItem(Long id ,int quantity){
+        CartItem cartItem = new CartItem( id, quantity);
         return  cartItemRepository.save(cartItem);
     }
 

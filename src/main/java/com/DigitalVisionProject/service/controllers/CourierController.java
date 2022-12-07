@@ -1,8 +1,7 @@
 package com.DigitalVisionProject.service.controllers;
 
 import com.DigitalVisionProject.service.models.Courier;
-import com.DigitalVisionProject.service.services.CourierService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.DigitalVisionProject.service.services.DeliveryStatusService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,18 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @Service
 public class CourierController {
 
-    private CourierService courierService;
+    private final DeliveryStatusService deliveryStatusService;
 
-    @Autowired
-    public CourierController(CourierService courierService) {
-        this.courierService = courierService;
+    public CourierController(DeliveryStatusService deliveryStatusService) {
+        this.deliveryStatusService = deliveryStatusService;
     }
-
-
 
     @PutMapping()
     public  ResponseEntity<Courier> updateStatus(@RequestBody String status, Long id){
-        Courier updateStatus = courierService.updateStatus(status,id);
+        Courier updateStatus = deliveryStatusService.updateStatus(status,id);
         return new ResponseEntity<>(updateStatus, HttpStatus.OK);
     }
 

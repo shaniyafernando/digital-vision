@@ -24,8 +24,16 @@ public class CartController {
     }
 
     @PostMapping()
+    public ResponseEntity<Cart> addFirstProductToCart(@RequestBody CartDTO cartDTO){
+        Cart newCartRecord = cartService.addFirstProductToCart(cartDTO.getUserId(),
+                cartDTO.getProductId(), cartDTO.getQuantityAddedToCart());
+        return new ResponseEntity<>(newCartRecord,HttpStatus.CREATED);
+    }
+
+    @PostMapping("/existing")
     public ResponseEntity<Cart> addProductToCart(@RequestBody CartDTO cartDTO){
-        Cart newCartRecord = cartService.addProductToCart(cartDTO);
+        Cart newCartRecord = cartService.addProductToExistingCart(cartDTO.getUserId(),
+                cartDTO.getProductId(), cartDTO.getQuantityAddedToCart());
         return new ResponseEntity<>(newCartRecord,HttpStatus.CREATED);
     }
 

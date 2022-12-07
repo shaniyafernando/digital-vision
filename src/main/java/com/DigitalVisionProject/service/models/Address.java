@@ -16,7 +16,10 @@ public class Address {
     private Long userId;
 
 
-    public Address() {}
+    public Address(String billingAddress, String deliveryAddress) {
+        this.billingAddress = billingAddress;
+        this.deliveryAddress = deliveryAddress;
+    }
 
     public Address(Long id, Long userId,String billingAddress, String deliveryAddress) {
         this.id = id;

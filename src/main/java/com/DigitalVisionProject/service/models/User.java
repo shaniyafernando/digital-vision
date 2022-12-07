@@ -18,6 +18,8 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private Long wishListId;
+    private Long cartId;
 
     public User(Long id, String username, String email, String password, Role role) {
         this.id = id;
@@ -34,8 +36,30 @@ public class User{
         this.role = role;
     }
 
+    public User(Long id, Long wishListId ,Long cartId) {
+        this.id = id;
+        this.wishListId = wishListId;
+        this.cartId = cartId;
+    }
+
     public User() {
 
+    }
+
+    public Long getWishListId() {
+        return wishListId;
+    }
+
+    public void setWishListId(Long wishListId) {
+        this.wishListId = wishListId;
+    }
+
+    public Long getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
     }
 
     public User(Long id) {

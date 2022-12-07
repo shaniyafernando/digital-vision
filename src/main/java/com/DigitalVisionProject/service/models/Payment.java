@@ -20,6 +20,7 @@ public class Payment implements Serializable {
 
     private double amount;
 
+    private Long userId;
 
     private Long  orderId;
 
@@ -29,6 +30,15 @@ public class Payment implements Serializable {
     private UUID invoiceNumber;
 
     public Payment() {
+    }
+
+    public Payment(LocalDate date, double amount, Long userId, Long orderId, PaymentType paymentType, UUID invoiceNumber) {
+        this.date = date;
+        this.amount = amount;
+        this.userId = userId;
+        this.orderId = orderId;
+        this.paymentType = paymentType;
+        this.invoiceNumber = invoiceNumber;
     }
 
     public Payment(Long id, LocalDate date, double amount, Long orderId, PaymentType paymentType, UUID invoiceNumber) {
@@ -46,6 +56,14 @@ public class Payment implements Serializable {
         this.orderId = orderId;
         this.paymentType = paymentType;
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {

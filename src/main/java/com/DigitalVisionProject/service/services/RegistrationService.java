@@ -1,6 +1,7 @@
 package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.dtos.RegistrationRequest;
+import com.DigitalVisionProject.service.models.Address;
 import com.DigitalVisionProject.service.models.ConfirmationToken;
 import com.DigitalVisionProject.service.models.enums.Role;
 import com.DigitalVisionProject.service.models.User;
@@ -39,7 +40,8 @@ public class RegistrationService {
                         request.getEmail(),
                         request.getPassword(),
                         Role.USER
-                )
+                ),
+                new Address(request.getBillingAddress(),request.getDeliveryAddress())
         );
 
         emailSender.send(request.getEmail(), buildEmail(request.getUsername(),token));

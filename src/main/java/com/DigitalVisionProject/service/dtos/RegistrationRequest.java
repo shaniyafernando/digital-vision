@@ -7,14 +7,15 @@ import lombok.ToString;
 @ToString
 public class RegistrationRequest {
 
-    private final String username;
-    private final String email;
-    private final String password;
+    private  String username;
+    private  String email;
+    private  String password;
 
-    private final String billingAddress;
-    private final String deliveryAddress;
+    private  String billingAddress;
+    private  String deliveryAddress;
 
-    public RegistrationRequest( String username, String email, String password, String billingAddress, String deliveryAddress) {
+    public RegistrationRequest( String username, String email, String password,
+                                String billingAddress, String deliveryAddress) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -22,6 +23,25 @@ public class RegistrationRequest {
         this.deliveryAddress = deliveryAddress;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setBillingAddress(String billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
 
     public String getUsername() {
         return username;

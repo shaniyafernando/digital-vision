@@ -30,40 +30,60 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public WishList addProductToWishList(Long userId, Long productId){
+    public WishList addFirstProductToWishList(Long userId, Long productId){
         Product product = productRepository.getReferenceById(productId);
-        WishListItem wishListItem = wishListItemService.addWishListItem(product);
+        User user = userRepository.getReferenceById(userId);
 
-        WishList wishList = (WishList) wishListRepository.findAll().stream().filter(
-                list -> list.getUserId().equals(userId));
+        WishList newWishList = new WishList();
 
-        if(!wishListRepository.existsById(wishList.getId())){
-            WishList newWishList = new WishList();
-            List<WishListItem> items = new ArrayList<>();
-            items.add(wishListItem);
-            newWishList.setWishListItems(items);
-            newWishList.setUserId(userId);
-            wishListRepository.save(newWishList);
-        }
+        List<WishListItem> newItems = new ArrayList<>();
+        WishListItem newItem = wishListItemService.addWishListItem(product);
+        newItems.add(newItem);
 
+        newWishList.setWishListItems(newItems);
+        WishList savedWishList = wishListRepository.save(newWishList);
+
+        user.setWishListId(savedWishList.getId());
+        userRepository.save(user);
+        return savedWishList;
+    }
+
+    public WishList addProductToExistingWishList(Long userId, Long productId){
+        User user = userRepository.getReferenceById(userId);
+        WishList wishList = wishListRepository.getReferenceById(user.getWishListId());
+        Product product = productRepository.getReferenceById(productId);
+
+        WishListItem newWishListItem = wishListItemService.addWishListItem(product);
         List<WishListItem> items = wishList.getWishListItems();
-        items.add(wishListItem);
+        items.add(newWishListItem);
         wishList.setWishListItems(items);
         return wishListRepository.save(wishList);
     }
 
-    public WishList removeProductFromWishList(Long wishlistId, Long wishListItemId){
+    public WishList removeProductFromWishList(Long userId, Long wishListItemId){
         WishListItem item = wishListItemService.getWishListItem(wishListItemId);
-        WishList wishList = wishListRepository.getReferenceById(wishlistId);
+        User user = userRepository.getReferenceById(userId);
+        WishList wishList = wishListRepository.getReferenceById(user.getWishListId());
+
         List<WishListItem> currentList = wishList.getWishListItems();
         currentList.remove(item);
         wishList.setWishListItems(currentList);
         wishListItemService.deleteWishListItem(wishListItemId);
-        return wishListRepository.save(wishList);
+
+        WishList savedList = wishListRepository.save(wishList);
+
+        if(savedList.getWishListItems().isEmpty()){
+            wishListRepository.deleteById(savedList.getId());
+            user.setWishListId(null);
+            userRepository.save(user);
+        }
+
+        return savedList;
     }
 
     public WishList getWishList(Long userId) {
-        return (WishList) wishListRepository.findAll().stream().filter(list -> list.getUserId().equals(userId));
+        User user = userRepository.getReferenceById(userId);
+        return wishListRepository.getReferenceById(user.getWishListId());
 
     }
 }

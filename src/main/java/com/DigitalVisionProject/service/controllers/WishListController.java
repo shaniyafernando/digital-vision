@@ -25,8 +25,14 @@ public class WishListController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<WishList> addProductToWishList(@RequestBody WishListDTO wishListDTO){
-        WishList wishList = wishListService.addProductToWishList(wishListDTO.getUserId(), wishListDTO.getProductId());
+    public ResponseEntity<WishList> addProductToNewWishList(@RequestBody WishListDTO wishListDTO){
+        WishList wishList = wishListService.addFirstProductToWishList(wishListDTO.getUserId(), wishListDTO.getProductId());
+        return new ResponseEntity<>(wishList,HttpStatus.OK);
+    }
+
+    @PostMapping("/existing")
+    public ResponseEntity<WishList> addProductToExistingWishList(@RequestBody WishListDTO wishListDTO){
+        WishList wishList = wishListService.addProductToExistingWishList(wishListDTO.getUserId(), wishListDTO.getProductId());
         return new ResponseEntity<>(wishList,HttpStatus.OK);
     }
 
