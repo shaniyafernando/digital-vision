@@ -38,9 +38,9 @@ public class WishListController {
 
     @PutMapping()
     public ResponseEntity<WishList> removeProductFromWishList(@RequestBody Map<String, Object> payload){
-        int wishlistId = (int) payload.get("wishlistId");
-        int productId = (int) payload.get("productId");
-        WishList wishList = wishListService.removeProductFromWishList((long) wishlistId,(long) productId);
+        int userId = (int) payload.get("userId");
+        int wishListItemId = (int) payload.get("wishListItemId");
+        WishList wishList = wishListService.removeProductFromWishList((long) userId, (long) wishListItemId);
         return new ResponseEntity<>(wishList,HttpStatus.OK);
     }
 

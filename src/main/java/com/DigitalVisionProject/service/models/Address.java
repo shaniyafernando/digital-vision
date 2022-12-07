@@ -1,11 +1,14 @@
 package com.DigitalVisionProject.service.models;
 
 import com.DigitalVisionProject.service.models.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-public class Address {
+public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -15,6 +18,9 @@ public class Address {
     private String deliveryAddress;
     private Long userId;
 
+
+    public Address() {
+    }
 
     public Address(String billingAddress, String deliveryAddress) {
         this.billingAddress = billingAddress;

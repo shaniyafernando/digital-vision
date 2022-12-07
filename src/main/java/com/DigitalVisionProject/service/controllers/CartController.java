@@ -37,7 +37,7 @@ public class CartController {
         return new ResponseEntity<>(newCartRecord,HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Cart> removeProductFromCart(@RequestBody Map<String, Object> payload){
         int userId = (int) payload.get("userId");
         int cartItemId = (int) payload.get("cartItemId");
@@ -46,7 +46,7 @@ public class CartController {
     }
 
 
-    @PostMapping("/products")
+    @PutMapping("/products")
     public ResponseEntity<Cart> getAllProductsInCart(@RequestBody Map<String, Object> payload){
         int id = (int) payload.get("id");
         Cart cartList = cartService.getAllProductsInCart((long) id);

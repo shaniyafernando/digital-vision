@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "api/v1/registration")
+@RequestMapping(path = "api/v1/authentication")
 @AllArgsConstructor
 public class RegistrationController {
 

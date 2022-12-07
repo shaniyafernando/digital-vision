@@ -1,9 +1,13 @@
 package com.DigitalVisionProject.service.models;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-public class WishListItem {
+public class WishListItem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

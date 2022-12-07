@@ -19,6 +19,7 @@ public class WishListItemService {
 
     public WishListItem addWishListItem(Product product){
         WishListItem item = new WishListItem();
+        item.setProduct(product);
         return wishListItemRepository.save(item);
     }
 

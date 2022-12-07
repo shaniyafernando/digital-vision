@@ -1,13 +1,16 @@
 package com.DigitalVisionProject.service.models;
 
 import com.DigitalVisionProject.service.models.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name="users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class User{
+public class User implements Serializable {
     @Id
     @SequenceGenerator(name="user_sequence",sequenceName = "user_sequence",allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_sequence")

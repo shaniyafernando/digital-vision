@@ -1,12 +1,14 @@
 package com.DigitalVisionProject.service.models;
 
 import com.DigitalVisionProject.service.models.enums.PaymentType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name="payments")
 public class Payment implements Serializable {

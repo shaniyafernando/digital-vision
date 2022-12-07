@@ -38,8 +38,8 @@ public class CartService {
         CartItem cartItem = cartItemService.addCartItem(productId,quantity);
         items.add(cartItem);
         cart.setCartItems(items);
-        Cart savedCart = cartRepository.save(cart);
 
+        Cart savedCart = cartRepository.save(cart);
         User user = userRepository.getReferenceById(userId);
         user.setCartId(savedCart.getId());
         userRepository.save(user);
@@ -84,8 +84,8 @@ public class CartService {
             int subtotal = product.getPrice() * cartItem.getQuantityAddedToCart();
             subTotals.add(subtotal);
         });
-        for (int i = 0; i < subTotals.size() ; i++) {
-            total = subTotals.get(i) + subTotals.get(i + 1);
+        for (Integer subTotal : subTotals) {
+            total += subTotal;
         }
         return total;
     }

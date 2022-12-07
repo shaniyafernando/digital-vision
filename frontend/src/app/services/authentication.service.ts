@@ -1,20 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { LoginDTO } from '../dtos/loginDTO';
+import { LoginRequest } from '../dtos/LoginRequest';
 import { UserDTO } from '../dtos/userDTO';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private apiServerUrl = environment.baseServerUrl;
-
   constructor(private http: HttpClient) { }
 
-  public login(userData: UserDTO){
+  public login(userData: User){
     localStorage.setItem('USER_ROLE', userData.role);
   }
    
@@ -38,7 +36,7 @@ export class AuthenticationService {
     localStorage.removeItem('USER_ROLE');
   }
 
-  public signIn(loginDetails: LoginDTO): Observable<UserDTO> {
-    return this.http.post<UserDTO>(`${this.apiServerUrl}authentication/login`, loginDetails);
+  public signIn(loginDetails: LoginRequest): Observable<User> {
+    return this.http.post<User>(`http://localhost:8080/api/v1/authentication/login`, loginDetails);
   }
 }

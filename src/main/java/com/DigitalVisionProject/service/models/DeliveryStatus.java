@@ -1,9 +1,12 @@
 package com.DigitalVisionProject.service.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table
 public class DeliveryStatus implements Serializable {

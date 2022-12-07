@@ -1,12 +1,18 @@
 package com.DigitalVisionProject.service.models;
 
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-public class CartItem {
+public class CartItem implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     private Long productId;

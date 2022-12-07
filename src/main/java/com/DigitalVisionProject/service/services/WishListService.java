@@ -84,6 +84,5 @@ public class WishListService {
     public WishList getWishList(Long userId) {
         User user = userRepository.getReferenceById(userId);
         return wishListRepository.getReferenceById(user.getWishListId());
-
     }
 }

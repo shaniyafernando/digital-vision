@@ -1,12 +1,16 @@
 package com.DigitalVisionProject.service.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-public class Cart {
+public class Cart implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)

@@ -1,9 +1,11 @@
 package com.DigitalVisionProject.service.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table
 public class Courier implements Serializable {

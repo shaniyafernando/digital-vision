@@ -1,10 +1,13 @@
 package com.DigitalVisionProject.service.models;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-public class ConfirmationToken {
+public class ConfirmationToken implements Serializable {
     @Id
     @SequenceGenerator(name="confirmation_token_sequence",sequenceName = "confirmation_token_sequence",allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "confirmation_token_sequence")

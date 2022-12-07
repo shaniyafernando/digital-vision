@@ -4,11 +4,10 @@ import { WishList } from "./WishList";
 
 export interface User{
     id: number;
-    username: String;
-    email: String;
-    password: String;
-    role: String;
-    cart: Cart;
-    wishList: WishList;
-    address: Address;
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+    cartId: number;
+    wishListId: number;
 }

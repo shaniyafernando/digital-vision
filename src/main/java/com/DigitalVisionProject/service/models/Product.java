@@ -25,19 +25,6 @@ public class Product implements Serializable {
     private int price;
     private int quantity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "wish_list_id")
-    private WishList wishList;
-
-    public WishList getWishList() {
-        return wishList;
-    }
-
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
-    }
-
-
     public Product() {}
     public Product(Long id, String image, String title, String description, String colour,
                    String brand,String category, int price, int quantity) {
