@@ -15,7 +15,6 @@ public class Payment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
     private Long id;
 
     private LocalDate date;
