@@ -9,7 +9,6 @@ import java.io.Serializable;
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name="users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User implements Serializable {
     @Id
     @SequenceGenerator(name="user_sequence",sequenceName = "user_sequence",allocationSize = 1)

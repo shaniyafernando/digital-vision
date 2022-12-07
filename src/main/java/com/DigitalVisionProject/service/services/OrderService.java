@@ -53,9 +53,14 @@ public class OrderService {
         newOrder.setSubTotal(cart.getTotal());
         newOrder.setDeliveryFee(20);
 
-        User user = (User) userRepository.findAll().stream().filter(
-                user1 -> user1.getCartId().equals(cart.getId()));
-        newOrder.setUserId(user.getId());
+        List<User> users = userRepository.findAll();
+        users.forEach(
+                user -> {
+                    if(user.getCartId().equals(cart.getId())){
+                        newOrder.setUserId(user.getId());
+                    }
+                }
+        );
 
         newOrder.setDate(LocalDate.now());
         Order order = orderRepository.save(newOrder);
