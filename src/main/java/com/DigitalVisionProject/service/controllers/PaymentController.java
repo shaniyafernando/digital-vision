@@ -30,11 +30,10 @@ public class PaymentController {
         this.paymentRepository = paymentRepository;
     }
 
-    @PutMapping("/user")
-    public ResponseEntity<Address> updateBillingAddressForPayment(@RequestBody Map<String, Object> payload){
-        int userId = (int) payload.get("userId");
-        String billingAddress = (String) payload.get("billingAddress");
-        Address updatedUser = paymentService.updateBillingAddressForPayment((long) userId,billingAddress);
+    @PutMapping()
+    public ResponseEntity<Address> updateBillingAddressForPayment(@RequestBody Address address){
+        Address updatedUser = paymentService.updateBillingAddressForPayment(
+                address.getId(),address.getBillingAddress());
         return new ResponseEntity<>(updatedUser,HttpStatus.OK);
     }
 

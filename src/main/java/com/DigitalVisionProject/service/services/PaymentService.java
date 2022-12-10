@@ -33,10 +33,10 @@ public class PaymentService {
         this.deliveryStatusService = deliveryStatusService;
     }
 
-    public Address updateBillingAddressForPayment(Long userId, String billingAddress){
-        Address user = (Address) addressRepository.findAll().stream().filter(address -> address.getUserId().equals(userId));
-        user.setBillingAddress(billingAddress);
-        return addressRepository.save(user);
+    public Address updateBillingAddressForPayment(Long id, String billingAddress){
+        Address address = addressRepository.getReferenceById(id);
+        address.setBillingAddress(billingAddress);
+        return addressRepository.save(address);
     }
 
     public String getBillingAddress(Long userId){

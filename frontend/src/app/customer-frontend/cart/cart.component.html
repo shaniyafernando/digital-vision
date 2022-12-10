@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     <h4>
-                                        ${{cartdto.subTotal}}.00
+                                        ${{cartdto.subtotal}}.00
                                     </h4>
                                 </td>
                             </tr>
@@ -64,50 +64,51 @@
 
                 </div>
                 <div class="ibox-content">
-                    <button  mat-flat-button color="accent" (click)="checkout()">Checkout</button>
-                    <button  mat-flat-button style="margin-left:10px;" color="primary" routerLink="/home">Continue shopping</button>
+                    <button  mat-flat-button style="margin-left:10px;" color="primary" type="button" routerLink="/home">Continue shopping</button>
                 </div>
             </div>
 
         </div>
         <div class="col-md-3">
             <div class="ibox">
-                <div class="ibox-title">
-                    <h5>Cart Summary</h5>
-                </div>
-                <div class="ibox-content">
-                    <span>
-                        <label for="deliveryAddress">Delivery Address</label>
-                        <input type="text" class="form-control" id="deliveryAddress">
-                    </span>
-                    <div  style="margin-top: 20px;"></div>
-                    <span>
-                        Subtotal
-                    </span>
-                    <h4 class="font-bold">
-                        ${{subTotal}}.00
-                    </h4>
-                    <span>
-                        Delivery Fee
-                    </span>
-                    <h4 class="font-bold">
-                        ${{deliveryFee}}.00
-                    </h4>
-                    <span>
-                        Total
-                    </span>
-                    <h2 class="font-bold">
-                        ${{total}}.00
-                    </h2>
-
-                    <br>
-                    <div class="m-t-sm">
-                        <div class="btn-group">
-                        <button  mat-flat-button color="accent" (click)="checkout()">Checkout</button>
-                        <button  mat-flat-button style="margin-left:10px;" color="primary" routerLink="/home">Cancel</button>
+                <form [formGroup]="orderForm" (ngSubmit)="checkout()">
+                    <div class="ibox-title">
+                        <h5>Cart Summary</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <span>
+                            <label for="deliveryAddress">Delivery Address</label>
+                            <input type="text" class="form-control" id="deliveryAddress" formControlName="deliveryAddress"><br>
+                            <small color="warn" *ngIf="formControls.deliveryAddress.errors && formControls.deliveryAddress.errors['required']">required*</small>
+                        </span>
+                        <div  style="margin-top: 20px;"></div>
+                        <span>
+                            Subtotal
+                        </span>
+                        <h4 class="font-bold">
+                            ${{subTotal}}.00
+                        </h4>
+                        <span>
+                            Delivery Fee
+                        </span>
+                        <h4 class="font-bold">
+                            ${{deliveryFee}}.00
+                        </h4>
+                        <span>
+                            Total
+                        </span>
+                        <h2 class="font-bold">
+                            ${{total}}.00
+                        </h2>
+    
+                        <br>
+                        <div class="m-t-sm">
+                            <div class="btn-group">
+                            <button  mat-flat-button color="accent" type="submit">Checkout</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

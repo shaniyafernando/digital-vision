@@ -72,17 +72,25 @@ public class OrderService {
     }
 
 
-    public void updateDeliveryAddressOfOrder(Long userId, String deliveryAddress){
-        Address user = (Address) addressRepository.findAll().stream().filter(
-                address -> address.getUserId().equals(userId));
-        user.setDeliveryAddress(deliveryAddress);
-        addressRepository.save(user);
+    public Address updateDeliveryAddressOfOrder(Long id, String deliveryAddress){
+        Address address = addressRepository.getReferenceById(id);
+        address.setDeliveryAddress(deliveryAddress);
+        return addressRepository.save(address);
     }
 
-    public String getDeliveryAddress(Long userId){
-        Address user = (Address) addressRepository.findAll().stream().filter(
-                address -> address.getUserId().equals(userId));
-        return user.getDeliveryAddress();
+    public Address getAddress(Long userId){
+        List<Address> addresses =  addressRepository.findAll();
+        Address place = new Address();
+        addresses.forEach(element -> {
+            if(element.getUserId().equals(userId)){
+                place.setId(element.getId());
+                place.setUserId(element.getUserId());
+                place.setDeliveryAddress(element.getDeliveryAddress());
+                place.setBillingAddress(element.getBillingAddress());
+
+            }
+        });
+        return place;
     }
 
 

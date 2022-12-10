@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CartComponent } from '../customer-frontend/cart/cart.component';
+import { PlaceOrderDTO } from '../dtos/PlaceOrderDTO';
+import { Address } from '../models/Address';
 import { Cart } from '../models/cart';
+import { CartItem } from '../models/cartItem';
 import { Product } from '../models/product';
 
 @Injectable({
@@ -22,4 +26,22 @@ export class CartService {
   public deleteCartItem(cartItemId: number): Observable<any> {
     return this.http.delete(`http://localhost:8080/api/v1/cart/${cartItemId}`);
   }
+
+  public getAddress(id: number): Observable<Address>{
+    return this.http.get<Address>(`http://localhost:8080/api/v1/order/${id}`);
+  }
+
+  public updateDeliveryAddress(address: Address):Observable<Address>{
+    return this.http.put<Address>(`http://localhost:8080/api/v1/order`, address);
+  }
+
+  public updateCartItem(cartItem: CartItem):Observable<CartItem>{
+    return this.http.put<CartItem>(`http://localhost:8080/api/v1/order/item`, cartItem);
+  }
+
+  public checkout(cart: Cart): Observable<PlaceOrderDTO>{
+    return this.http.post<PlaceOrderDTO>(`http://localhost:8080/api/v1/order`, cart);
+  }
+
+  
 }

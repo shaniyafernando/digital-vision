@@ -1,8 +1,11 @@
 package com.DigitalVisionProject.service.controllers;
 
 import com.DigitalVisionProject.service.dtos.PlaceOrderDTO;
+import com.DigitalVisionProject.service.models.Address;
 import com.DigitalVisionProject.service.models.Cart;
+import com.DigitalVisionProject.service.models.CartItem;
 import com.DigitalVisionProject.service.models.Order;
+import com.DigitalVisionProject.service.services.CartItemService;
 import com.DigitalVisionProject.service.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +19,12 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
+    private final CartItemService cartItemService;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, CartItemService cartItemService) {
         this.orderService = orderService;
+        this.cartItemService = cartItemService;
     }
 
     @PostMapping()
@@ -35,18 +40,23 @@ public class OrderController {
         return new ResponseEntity<>(order,HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateDeliveryAddressOfOrder(@RequestBody Map<String, Object> payload){
-        int id = (int) payload.get("id");
-        String address = (String) payload.get("deliveryAddress");
-        orderService.updateDeliveryAddressOfOrder((long) id,address);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping()
+    public ResponseEntity<Address> updateDeliveryAddressOfOrder(@RequestBody Address address){
+        Address place = orderService.updateDeliveryAddressOfOrder(address.getId(), address.getDeliveryAddress());
+        return new ResponseEntity<>(place,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getDeliveryAddressOfOrder(@PathVariable("id") Long id){
-        String address = orderService.getDeliveryAddress(id);
+    public ResponseEntity<Address> getAddress(@PathVariable("id") Long id){
+        Address address = orderService.getAddress(id);
         return new ResponseEntity<>(address ,HttpStatus.OK);
     }
+
+    @PutMapping("/item")
+    public ResponseEntity<CartItem> updateQuantityInCartItem(@RequestBody CartItem cartItem){
+        CartItem item = cartItemService.updateQuantityInCartItem(cartItem);
+        return new ResponseEntity<>(item,HttpStatus.OK);
+    }
+
 
 }

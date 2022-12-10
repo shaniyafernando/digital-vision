@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartDTO } from 'src/app/dtos/CartDTO';
+import { PlaceOrderDTO } from 'src/app/dtos/PlaceOrderDTO';
 import { CartItem } from 'src/app/models/cartItem';
 import { Product } from 'src/app/models/product';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -19,8 +21,15 @@ export class CartComponent implements OnInit {
   cartId: number = 0;
   subTotal: number = 0;
   noOfItems: number=0;
-  deliveryFee: number = 20;
+  deliveryFee: number = 150;
   total: number = 0;
+  order: PlaceOrderDTO = {} as PlaceOrderDTO;
+
+  orderForm = new FormGroup({
+    deliveryAddress: new FormControl('',[Validators.required])
+  });
+
+  get formControls() { return this.orderForm.controls; }
 
   constructor(private router: Router, private authenticationService: AuthenticationService,
     private cartService: CartService) { }
@@ -28,12 +37,17 @@ export class CartComponent implements OnInit {
   ngOnInit(): void {
     this.total = this.subTotal + this.deliveryFee;
     this.getAllProductsInCart();
+    this.getDeliveryAddress();
   }
 
   checkout(){
-    // pass in the product list with respective quantities and total amount to the order component. Check the product card component 
-    // to see how i have passed the data into product details component and check the product details component on how the data is recieved.
-    this.router.navigate(['/payment']);
+    // update delivery address
+
+    // update cart items
+
+    // checkout
+
+    this.router.navigate(['/payment'],{state: {data: {order: this.order}}});
   }
 
   public getAllProductsInCart(){
@@ -62,5 +76,17 @@ export class CartComponent implements OnInit {
     this.cartService.deleteCartItem(cartItemId);
     window.location.reload();
   }
+
+  public getDeliveryAddress(){
+    const userId = this.authenticationService.getCurrentUser();
+    this.cartService.getAddress(userId).subscribe(
+      response => {
+        let deliveryAddress = response.deliveryAddress as string;
+        this.orderForm.controls.deliveryAddress.setValue(deliveryAddress);
+      }
+    );
+  }
+
+  
 
 }
