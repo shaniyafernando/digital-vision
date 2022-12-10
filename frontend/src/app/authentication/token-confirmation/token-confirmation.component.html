@@ -2,11 +2,11 @@
     <div class="container padding-bottom-3x mb-2">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10" style="width: 700px">
-                <form class="card mt-4" [formGroup]="tokenConfirmationForm">
+                <form class="card mt-4" [formGroup]="tokenConfirmationForm" (ngSubmit)="onSubmit()">
                     <div class="card-body">
                         <div class="form-group">
                             <label for="token">Token Confirmation</label>
-                            <input type="text" class="form-control" id="token">
+                            <input type="text" class="form-control" id="token" formControlName="">
                             <small class="form-text text-muted">Enter the token sent to your email to activate your account.</small>
                         </div>
                     </div>

@@ -90,7 +90,7 @@ export class ProductListComponent implements OnInit {
   minPrice: number = 0;
   maxPrice: number = 0;
   searchDTO: SearchDTO = {} as SearchDTO ;
-  isLoggedIn: boolean = true;
+  isLoggedIn: boolean = false;
   userIsAnAdmin: boolean = false;
   noProductData: boolean = true
   formSubmitted: boolean = false;
@@ -100,11 +100,11 @@ export class ProductListComponent implements OnInit {
   constructor(public productService: ProductService, private router: Router,
     private authenticationService: AuthenticationService, public dialog: MatDialog,
     ) {
-   }
+  }
 
   ngOnInit(): void {
-    // this.isLoggedIn = this.authenticationService.isLoggedIn();
-    // this.userIsAnAdmin = this.authenticationService.userRoleIsAdmin();
+    this.isLoggedIn = this.authenticationService.isLoggedIn();
+    this.userIsAnAdmin = this.authenticationService.userRoleIsAdmin();
     this.getAllProducts();
     // this.addDummyData();
   }

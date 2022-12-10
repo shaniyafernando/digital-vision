@@ -11,14 +11,19 @@
               <form [formGroup]="loginForm" (ngSubmit)="signIn()">
                 <h1>Login</h1>
                 <p class="text-muted">Sign In to your account</p>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 errors">
                   <input type="text" class="form-control" placeholder="Username" formControlName="username">
+                  <small color="warn" *ngIf="formControls.username.errors && formControls.username.errors['required']">Username is required.</small>
                 </div>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 errors">
                   <input type="email" class="form-control" placeholder="Email" formControlName="email">
+                  <small *ngIf="formControls.email.errors && formControls.email.errors['email']">Email is invalid.</small>
+                  <small *ngIf="formControls.email.errors && formControls.email.errors['required']">Email is required.</small>
                 </div>
-                <div class="input-group mb-4">
+                <div class="input-group mb-4 errors">
                   <input type="password" class="form-control" placeholder="Password" formControlName="password">
+                  <small *ngIf="formControls.password.errors && formControls.password.errors['required']">Password is required.</small>
+                  <small *ngIf="formControls.password.errors && formControls.password.errors['minlength']">Password must contain at least 8 characters.</small>
                 </div>
                 <div class="row">
                   <button type="submit" mat-flat-button color="accent" class="btn px-4">Login</button>

@@ -57,7 +57,7 @@
                     <button mat-flat-button color="accent" type="submit" class="button-spacing">Add to cart</button>
                 </form>   
             <button mat-flat-button color="accent"  type="submit" class="button-spacing" *ngIf="showAddToWishListButton" (click)="onAddToWishList(finalProduct.id)">Add to wish list</button>
-            <button mat-flat-button  color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton">Remove product from Wish List</button>
+            <button mat-flat-button  color="warn" type="submit" class="button-spacing" *ngIf="showRemoveFromWishListButton" (click)="onRemoveFromWishList(finalProduct.id)">Remove product from Wish List</button>
             <button mat-flat-button color="primary" type="button" *ngIf="showGoBackButton" (click)="navigateToPreviousPage(finalComponent)" class="go-back-button">Go back</button>
             </div>
         </mat-card-content>

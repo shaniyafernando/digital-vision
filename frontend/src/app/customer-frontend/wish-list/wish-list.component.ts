@@ -1,6 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ExistsDTO } from 'src/app/dtos/ExistsDTO';
 import { Product } from 'src/app/models/product';
+import { WishList } from 'src/app/models/WishList';
+import { WishListItem } from 'src/app/models/WishListItem';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ProductService } from 'src/app/services/product.service';
 import { WishListService } from 'src/app/services/wish-list.service';
@@ -13,9 +16,12 @@ import { WishListService } from 'src/app/services/wish-list.service';
 export class WishListComponent implements OnInit {
 
   products: Product[]=[];
-  noProductData: boolean = false;
+  noProductData: boolean = true;
   component= "WishListComponent";
-  userId: number = 1;
+  wishListItems: WishListItem[] = [];
+  wishListExists:boolean = false;
+  
+
 
   dummyData: any[] = [
     {
@@ -51,27 +57,47 @@ export class WishListComponent implements OnInit {
   ];
 
   constructor(public wishListService: WishListService,
-     private authenticationService: AuthenticationService) { 
-      // this.userId = this.authenticationService.getCurrentUser();
-     }
+     private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
-    // this.getWishList();
-    this.onDummyData()
+    this.getWishList();
+    this.authenticationService.getCurrentUser();
+    // this.onDummyData()
   }
 
-  public onDummyData(){
-    this.products = this.dummyData;
-  }
-
-  // public getWishList(){
-  //   this.wishListService.getWishList(1).subscribe(
-  //     response => {
-  //       this.products = response;
-  //       if(this.products == null){this.noProductData = true}
-  //     }
-  //   )
+  // public onDummyData(){
+  //   this.products = this.dummyData;
   // }
+
+
+  public getWishList(){
+    
+    const userId =  this.authenticationService.getCurrentUser();
+
+    console.log(userId);
+    
+
+    if(userId !== 0){
+      this.authenticationService.getUser(userId).subscribe(
+        response => {
+          if(response.wishListId != null){
+            this.wishListExists = true;
+            this.wishListService.getWishList(userId).subscribe(
+              response => {
+                this.wishListItems = response.wishListItems;
+                this.wishListItems.forEach(wishlistitem => {
+                  this.products.push(wishlistitem.product);
+                });
+                console.log(response);
+                this.noProductData = false;
+              }
+            );
+          }
+        }
+      );
+    }
+    
+  }
 
   
 

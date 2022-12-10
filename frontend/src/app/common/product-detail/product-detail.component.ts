@@ -24,7 +24,7 @@ export class ProductDetailComponent implements OnInit {
   showEditActionButton: boolean = false;
   showDeleteActionButton: boolean = false;
 
-  data!:any;
+  data:any;
 
   finalProduct: Product = {} as Product;
   finalComponent: String = "";
@@ -35,12 +35,11 @@ export class ProductDetailComponent implements OnInit {
   userIsAdmin: boolean = false;
   wishlistdto: WishListDTO = {} as WishListDTO;
   currentUserId: number = 1;
+  wishListExist: boolean = false;
 
   constructor(private router: Router, private productService: ProductService, 
     private authenticationService : AuthenticationService, public dialog: MatDialog,
-    private wishlistService: WishListService) { 
-       this.currentUserId = this.authenticationService.getCurrentUser();
-    }
+    private wishlistService: WishListService) { }
 
   ngOnInit(): void {
     this.data = history.state.data;
@@ -50,10 +49,8 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private grantAccessToButtons(): void{
-    this.userIsAdmin = false;
-    // this.authenticationService.userRoleIsAdmin();
-    this.loggedIn = true;
-    // this.authenticationService.isLoggedIn();
+    this.userIsAdmin = this.authenticationService.userRoleIsAdmin();
+    this.loggedIn = this.authenticationService.isLoggedIn();
 
     if(this.userIsAdmin && this.loggedIn){
 
@@ -136,14 +133,36 @@ export class ProductDetailComponent implements OnInit {
   }
 
   public onAddToWishList(productId: number){
+  
+    const currentUserId = this.authenticationService.getCurrentUser();
 
-    this.wishlistdto.userId = 1;
-    this.wishlistdto.productId = productId;
-    console.log(this.wishlistdto);
-    this.wishlistService.addToWishList(this.wishlistdto).subscribe(
-      response => console.log(response)
+    this.authenticationService.getUser(currentUserId).subscribe(
+      response => {
+        console.log(response);
+        if(response.wishListId !== null){
+          this.wishListExist = true;
+          this.wishlistService.addProductToWishList(this.wishlistdto).subscribe(
+            response => console.log(response)
+          );
+        }else{
+          this.wishlistdto.userId = currentUserId;
+          this.wishlistdto.productId = productId;
+          this.wishlistService.addFirstProductToWishList(this.wishlistdto).subscribe(
+            response => console.log(response));
+        }
+      }
     );
+
+    
   }
 
+  public onRemoveFromWishList(id: number){
+    const currentUserId = this.authenticationService.getCurrentUser();
+
+    this.wishlistdto.userId = currentUserId;
+    this.wishlistdto.productId = id;
+    console.log(this.wishlistdto);
+    this.wishlistService.removeProductFromWishList(this.wishlistdto);
+  }
 
 }

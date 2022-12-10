@@ -1,7 +1,3 @@
-import { Address } from "./Address";
-import { Cart } from "./cart";
-import { WishList } from "./WishList";
-
 export interface User{
     id: number;
     username: string;

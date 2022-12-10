@@ -19,8 +19,8 @@ public class CourierController {
     }
 
     @PutMapping()
-    public  ResponseEntity<Courier> updateStatus(@RequestBody String status, Long id){
-        Courier updateStatus = deliveryStatusService.updateStatus(status,id);
+    public  ResponseEntity<Courier> updateStatus(@RequestBody String status, Long courierId){
+        Courier updateStatus = deliveryStatusService.updateStatus(status,courierId);
         return new ResponseEntity<>(updateStatus, HttpStatus.OK);
     }
 

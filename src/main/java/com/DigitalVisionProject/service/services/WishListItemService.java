@@ -1,10 +1,16 @@
 package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.models.Product;
+import com.DigitalVisionProject.service.models.User;
+import com.DigitalVisionProject.service.models.WishList;
 import com.DigitalVisionProject.service.models.WishListItem;
+import com.DigitalVisionProject.service.repositories.ProductRepository;
+import com.DigitalVisionProject.service.repositories.UserRepository;
 import com.DigitalVisionProject.service.repositories.WishListItemRepository;
+import com.DigitalVisionProject.service.repositories.WishListRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,8 +33,6 @@ public class WishListItemService {
         return wishListItemRepository.getReferenceById(id);
     }
 
-    public void deleteWishListItem(Long id){
-        wishListItemRepository.deleteById(id);
-    }
+
 
 }

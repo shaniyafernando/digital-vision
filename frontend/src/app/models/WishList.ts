@@ -1,8 +1,7 @@
-import { Product } from "./product";
-import { User } from "./User";
+
+import { WishListItem } from "./WishListItem";
 
 export interface WishList{
     id: number;
-    products: Product[];
-    user: User;
+    wishListItems: WishListItem[]
 }

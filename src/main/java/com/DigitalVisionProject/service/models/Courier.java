@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Table
 public class Courier implements Serializable {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long courierId;
     private Long deliveryId;
     private String status;

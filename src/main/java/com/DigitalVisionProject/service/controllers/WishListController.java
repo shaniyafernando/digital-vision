@@ -2,16 +2,13 @@ package com.DigitalVisionProject.service.controllers;
 
 
 import com.DigitalVisionProject.service.dtos.WishListDTO;
-import com.DigitalVisionProject.service.models.Product;
 import com.DigitalVisionProject.service.models.WishList;
+import com.DigitalVisionProject.service.services.WishListItemService;
 import com.DigitalVisionProject.service.services.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/wishlist")
@@ -19,9 +16,12 @@ public class WishListController {
 
     private final WishListService wishListService;
 
+    private final WishListItemService wishListItemService;
+
     @Autowired
-    public WishListController(WishListService wishListService) {
+    public WishListController(WishListService wishListService, WishListItemService wishListItemService) {
         this.wishListService = wishListService;
+        this.wishListItemService = wishListItemService;
     }
 
     @PostMapping("/new")
@@ -36,13 +36,13 @@ public class WishListController {
         return new ResponseEntity<>(wishList,HttpStatus.OK);
     }
 
-    @PutMapping()
-    public ResponseEntity<WishList> removeProductFromWishList(@RequestBody Map<String, Object> payload){
-        int userId = (int) payload.get("userId");
-        int wishListItemId = (int) payload.get("wishListItemId");
-        WishList wishList = wishListService.removeProductFromWishList((long) userId, (long) wishListItemId);
-        return new ResponseEntity<>(wishList,HttpStatus.OK);
+    @DeleteMapping("/{productId}/{userId}")
+    public ResponseEntity<?> removeProductFromWishList(
+            @PathVariable("productId") Long productId,@PathVariable("userId") Long userId){
+        wishListService.removeProductFromWishList(userId, productId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<WishList> getWishList(@PathVariable("userId") Long userId){

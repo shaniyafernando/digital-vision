@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {  FormControl, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
+import { RegistrationRequest } from 'src/app/dtos/RegistrationRequest';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -11,32 +13,58 @@ export class RegisterComponent implements OnInit {
 
   hide = true;
 
-  email = new FormControl('',[Validators.email,Validators.required]);
-  username = new FormControl('',[Validators.required]);
-  billingAddress = new FormControl('');
-  deliveryAddress = new FormControl('');
-  password  = new FormControl('',[Validators.required,Validators.minLength(8)]);
+  registerForm = new FormGroup({
+    email: new FormControl('',[Validators.email,Validators.required]),
+    username: new FormControl('',[Validators.required]),
+    billingAddress: new FormControl(''),
+    deliveryAddress: new FormControl(''),
+    password:new FormControl('',[Validators.required,Validators.minLength(8)])
+  });
 
-  registerForm!: FormGroup 
+  guest: RegistrationRequest = {} as RegistrationRequest;
+  isAfterNoAccessExpiryTime: boolean = true;
+  hasNoAccess: boolean = false;
 
   get formControls() { return this.registerForm.controls; }
 
-  constructor(private fb : FormBuilder, private router: Router) { }
+  constructor(private router: Router, private authenticationService: AuthenticationService) { 
+    this.isAfterNoAccessExpiryTime = this.authenticationService.isAfterNoAccessExpiryTime();
+  }
 
   ngOnInit(): void {
-    this.buildRegisterForm();
+    this.hasNoAccess = this.authenticationService.hasNoAccess();
   }
 
-  buildRegisterForm(){
-    this.fb.group({
-      email: this.email,
-      username: this.username,
-      password: this.password,
-      billingAddress: this.billingAddress,
-      deliveryAddress: this.deliveryAddress
-    });
-  }
+  public signUp(){
+    this.guest.username = this.registerForm.value.username as String;
+    this.guest.email = this.registerForm.value.email as String;
+    this.guest.password = this.registerForm.value.password as String;
+    this.guest.billingAddress = this.registerForm.value.billingAddress as String;
+    this.guest.deliveryAddress = this.registerForm.value.deliveryAddress as String;
 
+      if(this.hasNoAccess == false){
+        this.authenticationService.signUp(this.guest).subscribe(
+          response => {
+            console.log(response);
+            this.authenticationService.token(response);
+            this.router.navigate(['/token'])
+        });
+      }
+       
+      if(this.hasNoAccess == true){
+        
+        if(this.isAfterNoAccessExpiryTime == true){
+          this.authenticationService.signUp(this.guest).subscribe(
+            response => {
+              console.log(response);
+              this.authenticationService.token(response);
+              this.router.navigate(['/token'])
+          })
+        }
+  
+        this.router.navigate(['/home']);
+      }  
+  }
   
 
 }

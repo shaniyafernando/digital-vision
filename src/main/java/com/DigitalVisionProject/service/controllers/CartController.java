@@ -2,13 +2,15 @@ package com.DigitalVisionProject.service.controllers;
 
 import com.DigitalVisionProject.service.dtos.CartDTO;
 import com.DigitalVisionProject.service.models.Cart;
+import com.DigitalVisionProject.service.models.Product;
+import com.DigitalVisionProject.service.services.CartItemService;
 import com.DigitalVisionProject.service.services.CartService;
+import com.DigitalVisionProject.service.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,11 +18,14 @@ import java.util.Map;
 public class CartController {
 
     private final CartService cartService;
-
+    private final CartItemService cartItemService;
+    private final ProductService productService;
 
     @Autowired
-    public CartController(CartService cartService){
+    public CartController(CartService cartService, CartItemService cartItemService, ProductService productService){
         this.cartService = cartService;
+        this.cartItemService = cartItemService;
+        this.productService = productService;
     }
 
     @PostMapping()
@@ -37,20 +42,23 @@ public class CartController {
         return new ResponseEntity<>(newCartRecord,HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Cart> removeProductFromCart(@RequestBody Map<String, Object> payload){
-        int userId = (int) payload.get("userId");
-        int cartItemId = (int) payload.get("cartItemId");
-        Cart cart = cartService.removeProductFromCart((long) userId,(long) cartItemId);
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeProductFromCart(@PathVariable("id") Long id){
+        cartItemService.deleteCartItem(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-    @PutMapping("/products")
-    public ResponseEntity<Cart> getAllProductsInCart(@RequestBody Map<String, Object> payload){
-        int id = (int) payload.get("id");
-        Cart cartList = cartService.getAllProductsInCart((long) id);
+    @GetMapping("/products/{id}")
+    public ResponseEntity<Cart> getAllProductsInCart(@PathVariable("id") Long id){
+        Cart cartList = cartService.getAllProductsInCart(id);
         return new ResponseEntity<>(cartList, HttpStatus.OK);
+    }
+
+    @GetMapping("/product/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable("id") Long id){
+        Product product = productService.getProduct(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
 

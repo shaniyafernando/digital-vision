@@ -38,6 +38,7 @@ import { DeliveryStatusComponent } from "./customer-frontend/delivery-status/del
 import { PaymentComponent } from "./customer-frontend/payment/payment.component";
 import { WishListComponent } from "./customer-frontend/wish-list/wish-list.component";
 import { TokenConfirmationComponent } from './authentication/token-confirmation/token-confirmation.component';
+import { BasicDialogComponent } from './common/basic-dialog/basic-dialog.component';
 
 
 
@@ -58,7 +59,8 @@ import { TokenConfirmationComponent } from './authentication/token-confirmation/
     DeliveryStatusComponent,
     PaymentComponent,
     WishListComponent,
-    TokenConfirmationComponent
+    TokenConfirmationComponent,
+    BasicDialogComponent
   ],
   imports: [
     BrowserModule,

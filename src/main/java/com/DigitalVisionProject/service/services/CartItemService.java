@@ -20,7 +20,7 @@ public class CartItemService {
     }
 
     public CartItem addCartItem(Long id ,int quantity){
-        CartItem cartItem = new CartItem( id, quantity);
+        CartItem cartItem = new CartItem(id, quantity);
         return  cartItemRepository.save(cartItem);
     }
 

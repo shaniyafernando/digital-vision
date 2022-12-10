@@ -7,12 +7,8 @@
 <div class="container margin">
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-9" *ngFor="let cartdto of cartdtos">
             <div class="ibox">
-                <div class="ibox-title">
-                    <span class="pull-right">(<strong>1</strong>) items</span>
-                    <h5>Items in your cart</h5>
-                </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table class="table shoping-cart-table">
@@ -23,42 +19,42 @@
                                 </td>
                                 <td class="desc">
                                     <h3>
-                                    <a href="#" class="text-navy">
-                                        Mobile stand
-                                    </a>
+                                    <p class="text-navy">
+                                        {{cartdto.product.title}}
+                                    </p>
                                     </h3>
                                     <p class="small">
-                                        It is a a mobile stand.
+                                        {{cartdto.product.description}}
                                     </p>
                                     <dl class="small m-b-none">
                                         <dt>Brand</dt>
-                                        <dd>KOKO</dd>
+                                        <dd>{{cartdto.product.brand}}</dd>
                                     </dl>
 
                                     <dl class="small m-b-none">
                                         <dt>Color</dt>
-                                        <dd>Pink</dd>
+                                        <dd>{{cartdto.product.colour}}</dd>
                                     </dl>
 
                                     <dl class="small m-b-none">
                                         <dt>Category</dt>
-                                        <dd>STANDS</dd>
+                                        <dd>{{cartdto.product.category}}</dd>
                                     </dl>
                                     <!-- class="m-t-sm" -->
                                     <div>
-                                        <button mat-button><mat-icon color="warn">delete</mat-icon> Remove item</button>
+                                        <button mat-button (click)="removeCartItem(cartdto.cartItemId)"><mat-icon color="warn">delete</mat-icon> Remove item</button>
                                     </div>
                                 </td>
 
                                 <td>
-                                    $180,00
+                                    ${{cartdto.product.price}}.00
                                 </td>
                                 <td width="65">
-                                    <input type="text" class="form-control" placeholder="1">
+                                    <input type="text" class="form-control" placeholder="{{cartdto.quantity}}">
                                 </td>
                                 <td>
                                     <h4>
-                                        $180,00
+                                        ${{cartdto.subTotal}}.00
                                     </h4>
                                 </td>
                             </tr>
@@ -89,19 +85,19 @@
                         Subtotal
                     </span>
                     <h4 class="font-bold">
-                        $180,00
+                        ${{subTotal}}.00
                     </h4>
                     <span>
                         Delivery Fee
                     </span>
                     <h4 class="font-bold">
-                        $20,00
+                        ${{deliveryFee}}.00
                     </h4>
                     <span>
                         Total
                     </span>
                     <h2 class="font-bold">
-                        $200,00
+                        ${{total}}.00
                     </h2>
 
                     <br>

@@ -4,6 +4,11 @@ body{
     
 }
 
+.errors{
+    display: flex ; 
+    flex-direction:column
+}
+
 .accent{
     color: #ffc107;
 }

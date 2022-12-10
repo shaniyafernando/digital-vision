@@ -1,6 +1,7 @@
 package com.DigitalVisionProject.service.services;
 
 import com.DigitalVisionProject.service.dtos.RegistrationRequest;
+import com.DigitalVisionProject.service.dtos.TokenResponse;
 import com.DigitalVisionProject.service.models.Address;
 import com.DigitalVisionProject.service.models.ConfirmationToken;
 import com.DigitalVisionProject.service.models.enums.Role;
@@ -29,7 +30,7 @@ public class RegistrationService {
         this.emailSender = emailSender;
     }
 
-    public String register(RegistrationRequest request) {
+    public TokenResponse register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
             throw new IllegalStateException("email not valid");
@@ -46,11 +47,12 @@ public class RegistrationService {
 
         emailSender.send(request.getEmail(), buildEmail(request.getUsername(),token));
 
-        return token;
+        TokenResponse response = new TokenResponse(token);
+        return response;
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public TokenResponse confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
@@ -67,7 +69,7 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        return "confirmed";
+        return new TokenResponse("confirmed", confirmationToken.getAppUser());
     }
 
     private String buildEmail(String name, String token) {
@@ -126,7 +128,7 @@ public class RegistrationService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <p>" + token + "</p> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please enter the code to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <p>" + token + "</p> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

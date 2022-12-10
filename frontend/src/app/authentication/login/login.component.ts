@@ -24,11 +24,16 @@ export class LoginComponent implements OnInit {
 
   guest: LoginRequest = {} as LoginRequest;
   user: User = {} as User;
+  isAfterNoAccessExpiryTime: boolean = true;
+  hasNoAccess: boolean = false;
 
   get formControls() { return this.loginForm.controls; }
 
   constructor( private router: Router, 
-    private authenticationService: AuthenticationService,) { }
+    private authenticationService: AuthenticationService,) { 
+      this.isAfterNoAccessExpiryTime = this.authenticationService.isAfterNoAccessExpiryTime();
+      this.hasNoAccess = this.authenticationService.hasNoAccess();
+    }
 
   ngOnInit(): void {
   }
@@ -37,10 +42,34 @@ export class LoginComponent implements OnInit {
     this.guest.email = this.loginForm.value.email as String;
     this.guest.username = this.loginForm.value.username as String ;
     this.guest.password = this.loginForm.value.password as String;
-    this.authenticationService.signIn(this.guest).subscribe(
-      response => this.user = response
-    );
-    this.authenticationService.login(this.user);
+
+    
+    if(this.hasNoAccess == false){
+      this.authenticationService.signIn(this.guest).subscribe(
+        response => {
+          console.log(response);
+          this.authenticationService.login(response);
+          this.authenticationService.setUserId(response);
+          this.router.navigate(['/home']);
+        });
+    }
+     
+    if(this.hasNoAccess == true){
+      
+      if(this.isAfterNoAccessExpiryTime == true){
+        this.authenticationService.removeNoAccess();
+        this.authenticationService.signIn(this.guest).subscribe(
+          response => {
+            console.log(response);
+            this.authenticationService.login(response);
+            this.authenticationService.setUserId(response);
+            this.router.navigate(['/home']);
+          });
+      }
+
+      this.router.navigate(['/home']);
+    }
+    
   }
 
   public navigateToRegister(){

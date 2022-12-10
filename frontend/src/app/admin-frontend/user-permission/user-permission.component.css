@@ -2,6 +2,10 @@ body{margin-top:20px;}
 .form-control:not(textarea) {
     height: 44px;
 }
+
+mat-form-field{
+    width:100%;
+}
 .form-control {
     padding: 0 18px 3px;
     border: 1px solid #dbe2e8;

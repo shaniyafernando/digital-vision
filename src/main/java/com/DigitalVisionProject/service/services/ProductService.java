@@ -118,4 +118,8 @@ public class ProductService {
         return filteredProducts;
     }
 
+    public Product getProduct(Long id){
+        return productRepository.getReferenceById(id);
+    }
+
 }

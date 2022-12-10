@@ -30,11 +30,11 @@ public class ConfirmationToken implements Serializable {
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiresAt,
-                             User appuser) {
+                             User appUser) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.appUser = appuser;
+        this.appUser = appUser;
     }
 
     public Long getId() {

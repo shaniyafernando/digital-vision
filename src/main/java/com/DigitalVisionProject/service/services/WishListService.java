@@ -17,15 +17,17 @@ import java.util.List;
 public class WishListService {
     private final WishListRepository wishListRepository;
     private final WishListItemService wishListItemService;
+    private final WishListItemRepository wishListItemRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
     @Autowired
     public WishListService(WishListRepository wishListRepository,
-                            WishListItemService wishListItemService, UserRepository userRepository,
+                           WishListItemService wishListItemService, WishListItemRepository wishListItemRepository, UserRepository userRepository,
                            ProductRepository productRepository) {
         this.wishListRepository = wishListRepository;
         this.wishListItemService = wishListItemService;
+        this.wishListItemRepository = wishListItemRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
     }
@@ -60,25 +62,29 @@ public class WishListService {
         return wishListRepository.save(wishList);
     }
 
-    public WishList removeProductFromWishList(Long userId, Long wishListItemId){
-        WishListItem item = wishListItemService.getWishListItem(wishListItemId);
+    public void removeProductFromWishList(Long userId, Long productId){
+        Product product = productRepository.getReferenceById(productId);
         User user = userRepository.getReferenceById(userId);
         WishList wishList = wishListRepository.getReferenceById(user.getWishListId());
+        List<WishListItem> items = new ArrayList<>();
+        wishList.getWishListItems().forEach(
+                wishListItem -> {
+                    if(wishListItem.getProduct().equals(product)){
+                        wishListItemRepository.deleteById(wishListItem.getId());
+                    }else{
+                        items.add(wishListItem);
+                    }
+                }
+        );
+        wishList.setWishListItems(items);
+        WishList save = wishListRepository.save(wishList);
 
-        List<WishListItem> currentList = wishList.getWishListItems();
-        currentList.remove(item);
-        wishList.setWishListItems(currentList);
-        wishListItemService.deleteWishListItem(wishListItemId);
-
-        WishList savedList = wishListRepository.save(wishList);
-
-        if(savedList.getWishListItems().isEmpty()){
-            wishListRepository.deleteById(savedList.getId());
+        if(save.getWishListItems().isEmpty()){
+            wishListRepository.deleteById(wishList.getId());
             user.setWishListId(null);
             userRepository.save(user);
         }
 
-        return savedList;
     }
 
     public WishList getWishList(Long userId) {

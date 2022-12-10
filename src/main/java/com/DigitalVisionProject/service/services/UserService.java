@@ -5,16 +5,15 @@ import com.DigitalVisionProject.service.exceptions.UserNotFoundException;
 import com.DigitalVisionProject.service.models.Address;
 import com.DigitalVisionProject.service.models.ConfirmationToken;
 import com.DigitalVisionProject.service.models.User;
-import com.DigitalVisionProject.service.models.enums.PaymentType;
 import com.DigitalVisionProject.service.models.enums.Role;
 import com.DigitalVisionProject.service.repositories.AddressRepository;
 import com.DigitalVisionProject.service.repositories.UserRepository;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,13 +22,15 @@ public class UserService{
     private final UserRepository appUserRepository;
     private final AddressRepository addressRepository;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
     public UserService(UserRepository appUserRepository,
-                       ConfirmationTokenService confirmationTokenService, AddressRepository addressRepository) {
+                       ConfirmationTokenService confirmationTokenService, AddressRepository addressRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.appUserRepository = appUserRepository;
         this.confirmationTokenService = confirmationTokenService;
         this.addressRepository = addressRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
@@ -42,13 +43,13 @@ public class UserService{
             throw new IllegalStateException("email already taken");
         }
 
-        appUser.setPassword(appUser.getPassword());
+        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
 
-        appUserRepository.save(appUser);
+        User savedAppUser = appUserRepository.save(appUser);
 
         address.setDeliveryAddress(address.getDeliveryAddress());
         address.setBillingAddress(address.getBillingAddress());
-        address.setUserId(address.getUserId());
+        address.setUserId(savedAppUser.getId());
         addressRepository.save(address);
 
         String token = UUID.randomUUID().toString();
@@ -56,8 +57,7 @@ public class UserService{
                 token,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(15),
-                appUser
-
+                savedAppUser
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
@@ -73,13 +73,27 @@ public class UserService{
         boolean userExists = appUserRepository
                 .findByEmail(loginRequest.getEmail()).isPresent();
         if(!userExists){
-            throw new UserNotFoundException("User not found: "+ loginRequest.getEmail());
+            throw new UserNotFoundException("User not found: " + loginRequest.getEmail());
         }
 
-        User appUser = (User) appUserRepository.findAll().stream().filter(
-                user -> user.getEmail().equals(loginRequest.getEmail()));
-        if(!appUser.getPassword().equals(loginRequest.getPassword()) ||
-                !appUser.getUsername().equals(loginRequest.getUsername())){
+        List<User> users = appUserRepository.findAll();
+
+        User appUser = new User();
+        users.forEach(
+                user -> {
+                    if(user.getEmail().equals(loginRequest.getEmail())){
+                        appUser.setId(user.getId());
+                        appUser.setEmail(user.getEmail());
+                        appUser.setPassword(user.getPassword());
+                        appUser.setUsername(user.getUsername());
+                        appUser.setRole(user.getRole());
+                    }
+                });
+
+        boolean passwordMatches = bCryptPasswordEncoder.matches(loginRequest.getPassword(), appUser.getPassword());
+        boolean usernameMatches = appUser.getUsername().equals(loginRequest.getUsername());
+
+        if(!usernameMatches || !passwordMatches){
             throw new UserNotFoundException("Invalid credentials");
         }
         return appUser;
@@ -89,6 +103,10 @@ public class UserService{
         User user = appUserRepository.getReferenceById(userId);
         user.setRole(Role.valueOf(role));
         return appUserRepository.save(user);
+    }
+
+    public User getUser(Long id){
+        return appUserRepository.getReferenceById(id);
     }
 
     public List<User> getUsers(){
