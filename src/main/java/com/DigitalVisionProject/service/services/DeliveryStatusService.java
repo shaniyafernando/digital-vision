@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class DeliveryStatusService {
@@ -39,9 +40,17 @@ public class DeliveryStatusService {
         return deliveryStatusRepository.save(deliveryStatus);
     }
 
-    public DeliveryStatus getDeliveryStatus(Long userId){
-        return (DeliveryStatus) deliveryStatusRepository.findAll().stream().filter(
-                deliveryStatus -> deliveryStatus.getUserId().equals(userId));
+    public DeliveryStatus getDeliveryStatus(Long paymentId){
+        List<DeliveryStatus> list = deliveryStatusRepository.findAll();
+        DeliveryStatus status = new DeliveryStatus();
+        list.forEach(deliveryStatus -> {
+            if(deliveryStatus.getPaymentId().equals(paymentId)){
+                status.setId(deliveryStatus.getId());
+                status.setStatus(deliveryStatus.getStatus());
+                status.setDate(deliveryStatus.getDate());
+            }
+        });
+        return status;
     }
 
     public void addNewCourier(DeliveryStatus deliveryStatus){

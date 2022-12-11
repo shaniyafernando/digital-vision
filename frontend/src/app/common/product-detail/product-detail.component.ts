@@ -96,7 +96,9 @@ export class ProductDetailComponent implements OnInit {
 
   }
 
-  public onSubmit(){}
+  public onSubmit(){
+    
+  }
 
   openDialog(product: Product): void {
     const dialogRef = this.dialog.open(ProductFormComponent, {
@@ -161,7 +163,7 @@ export class ProductDetailComponent implements OnInit {
 
     this.wishlistdto.userId = currentUserId;
     this.wishlistdto.productId = id;
-    console.log(this.wishlistdto);
+    console.log(this.wishlistdto)
     this.wishlistService.removeProductFromWishList(this.wishlistdto);
   }
 

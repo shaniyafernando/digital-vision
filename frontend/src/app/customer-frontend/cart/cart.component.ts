@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CartDTO } from 'src/app/dtos/CartDTO';
+import { CartListDTO } from 'src/app/dtos/CartListDTO';
 import { PlaceOrderDTO } from 'src/app/dtos/PlaceOrderDTO';
 import { CartItem } from 'src/app/models/cartItem';
 import { Product } from 'src/app/models/product';
@@ -15,8 +15,8 @@ import { CartService } from 'src/app/services/cart.service';
 })
 export class CartComponent implements OnInit {
 
-  cartdtos: CartDTO[] = [];
-  cartdto: CartDTO = {} as CartDTO;
+  cartdtos: CartListDTO[] = [];
+  cartdto: CartListDTO = {} as CartListDTO;
   cartItems: CartItem[] = [];
   cartId: number = 0;
   subTotal: number = 0;

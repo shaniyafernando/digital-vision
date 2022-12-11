@@ -44,7 +44,7 @@ public class PaymentService {
         return user.getBillingAddress();
     }
 
-    public void pay(PaymentDTO payment){
+    public Payment pay(PaymentDTO payment){
         Payment newPayment = new Payment(
                 LocalDate.now(),
                 payment.getAmount(),
@@ -58,6 +58,7 @@ public class PaymentService {
         cartService.deleteCart(savedPayment.getUserId());
         orderConfirmationEmailService.sendOrderConfirmationEmail(savedPayment);
         deliveryStatusService.addDeliveryStatus(savedPayment);
+        return savedPayment;
     }
 
 

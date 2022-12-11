@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CartComponent } from '../customer-frontend/cart/cart.component';
 import { PlaceOrderDTO } from '../dtos/PlaceOrderDTO';
 import { Address } from '../models/Address';
 import { Cart } from '../models/cart';

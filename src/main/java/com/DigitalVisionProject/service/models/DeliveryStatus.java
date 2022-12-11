@@ -21,8 +21,8 @@ public class DeliveryStatus implements Serializable {
 
     private LocalDate date;
 
-    public DeliveryStatus(Long paymentId, String status, LocalDate date) {
-        this.paymentId = paymentId;
+    public DeliveryStatus(Long id, String status, LocalDate date) {
+        this.id = id;
         this.status = status;
         this.date = date;
     }
@@ -33,6 +33,8 @@ public class DeliveryStatus implements Serializable {
         this.status = status;
         this.date = date;
     }
+
+
 
     public DeliveryStatus() {
 

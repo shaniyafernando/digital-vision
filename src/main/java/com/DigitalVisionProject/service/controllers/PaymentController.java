@@ -38,9 +38,9 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> pay(@RequestBody PaymentDTO payment){
-        paymentService.pay(payment);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Payment> pay(@RequestBody PaymentDTO payment){
+        Payment payed = paymentService.pay(payment);
+        return new ResponseEntity<>(payed,HttpStatus.OK);
     }
 
 //    for testing only
