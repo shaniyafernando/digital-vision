@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartListDTO } from 'src/app/dtos/CartListDTO';
 import { PlaceOrderDTO } from 'src/app/dtos/PlaceOrderDTO';
+import { Address } from 'src/app/models/Address';
+import { Cart } from 'src/app/models/cart';
 import { CartItem } from 'src/app/models/cartItem';
 import { Product } from 'src/app/models/product';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -24,6 +26,9 @@ export class CartComponent implements OnInit {
   deliveryFee: number = 150;
   total: number = 0;
   order: PlaceOrderDTO = {} as PlaceOrderDTO;
+  oldAddress: Address = {} as Address;
+  newAddress: Address = {} as Address;
+  cart: Cart = {} as Cart;
 
   orderForm = new FormGroup({
     deliveryAddress: new FormControl('',[Validators.required])
@@ -42,10 +47,22 @@ export class CartComponent implements OnInit {
 
   checkout(){
     // update delivery address
-
-    // update cart items
+    this.newAddress.id = this.oldAddress.id;
+    this.newAddress.userId = this.oldAddress.userId;
+    this.newAddress.billingAddress = this.oldAddress.billingAddress;
+    this.newAddress.deliveryAddress = this.orderForm.value.deliveryAddress as string;
+    this.cartService.updateDeliveryAddress(this.newAddress).subscribe(
+      response => console.log(response)
+    );
+    // update quantity of cart items
+    this.cartdtos.forEach(element => {
+      
+    });
 
     // checkout
+    this.cartService.checkout(this.cart).subscribe(
+      response => this.order = response
+    );
 
     this.router.navigate(['/payment'],{state: {data: {order: this.order}}});
   }
@@ -82,6 +99,7 @@ export class CartComponent implements OnInit {
     this.cartService.getAddress(userId).subscribe(
       response => {
         let deliveryAddress = response.deliveryAddress as string;
+        this.oldAddress = response;
         this.orderForm.controls.deliveryAddress.setValue(deliveryAddress);
       }
     );

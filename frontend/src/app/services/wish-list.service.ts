@@ -31,6 +31,10 @@ export class WishListService {
     return this.http.delete(`http://localhost:8080/api/v1/wishlist/${productId}/${userId}`);
   }
 
+  public deleteWishListItem(wishListId: number, productId: number){
+    return this.http.delete(`http://localhost:8080/api/v1/wishlist/${wishListId}/${productId}`);
+  }
+
 
 
   // public deleteFromWishList(id: number): Observable<any> {

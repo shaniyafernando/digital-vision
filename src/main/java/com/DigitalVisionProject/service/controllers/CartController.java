@@ -2,6 +2,7 @@ package com.DigitalVisionProject.service.controllers;
 
 import com.DigitalVisionProject.service.dtos.CartDTO;
 import com.DigitalVisionProject.service.models.Cart;
+import com.DigitalVisionProject.service.models.CartItem;
 import com.DigitalVisionProject.service.models.Product;
 import com.DigitalVisionProject.service.services.CartItemService;
 import com.DigitalVisionProject.service.services.CartService;
@@ -59,6 +60,12 @@ public class CartController {
     public ResponseEntity<Product> getProduct(@PathVariable("id") Long id){
         Product product = productService.getProduct(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @GetMapping("/item/{id}")
+    public ResponseEntity<CartItem> getCartItem(@PathVariable("id") Long id){
+        CartItem cartItem = cartItemService.getCartItem(id);
+        return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }
 
 
