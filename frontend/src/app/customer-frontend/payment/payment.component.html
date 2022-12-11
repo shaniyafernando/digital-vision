@@ -11,9 +11,10 @@
               <div class="col-lg-9">
                 <div class="accordion" id="accordionPayment">
                   <div class="accordion-item mb-3">
-                      <div class="mb-3">
+                      <div class="mb-3 errors">
                           <label class="form-label">Billing Address</label>
                           <input matInput type="number" class="form-control" formControlName="billingAddress">
+                          <small *ngIf="formControls.billingAddress.errors && formControls.billingAddress.errors['required']">Billing address is required.</small>
                         </div>
                   </div>
                   <!-- Credit card -->
@@ -34,27 +35,31 @@
                     </h2>
                     <div id="collapseCC" class=" collapse show" data-bs-parent="#accordionPayment">
                       <div>
-                        <div class="accordion-item mb-3">
+                        <div class="accordion-item mb-3 errors">
                           <label class="form-label">Card Number</label>
                           <input matInput type="number" class="form-control" formControlName="cardNumber">
+                          <small *ngIf="formControls.cardNumber.errors && formControls.cardNumber.errors['required']">Card number is required.</small>
                         </div>
                         <div class="row">
                           <div class="col-lg-6">
-                            <div class=" accordion-item mb-3">
+                            <div class=" accordion-item mb-3 errors">
                               <label class="form-label">Name on card</label>
                               <input matInput type="text" class="form-control" formControlName="name">
+                              <small *ngIf="formControls.name.errors && formControls.name.errors['required']">Name of card holder is required.</small>
                             </div>
                           </div>
                           <div class="col-lg-3">
-                            <div class="accordion-item mb-3">
+                            <div class="accordion-item mb-3 errors">
                               <label class="form-label">Expiry date</label>
                               <input matInput type="number" class="form-control"placeholder="MM/YY"  formControlName="expiryDate">
+                              <small *ngIf="formControls.expiryDate.errors && formControls.expiryDate.errors['required']">Expiry date is required.</small>
                             </div>
                           </div>
                           <div class="col-lg-3">
-                            <div class="accordion-item mb-3">
+                            <div class="accordion-item mb-3 errors">
                               <label class="form-label">CVV Code</label>
                               <input matInput type="password" class="form-control" formControlName="cvvCode">
+                              <small *ngIf="formControls.cvvCode.errors && formControls.cvvCode.errors['required']">CVV Code is required.</small>
                             </div>
                           </div>
                         </div>

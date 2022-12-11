@@ -29,6 +29,8 @@ export class PaymentComponent implements OnInit {
   newAddress: Address = {} as Address;
   order: PlaceOrderDTO = {} as PlaceOrderDTO;
 
+  get formControls() { return this.paymentForm.controls; }
+
   constructor( private authenticationService : AuthenticationService,
     private cartService: CartService, private paymentService: PaymentService,
     private router: Router) { }

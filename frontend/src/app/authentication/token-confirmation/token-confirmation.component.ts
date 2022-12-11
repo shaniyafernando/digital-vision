@@ -46,23 +46,18 @@ export class TokenConfirmationComponent implements OnInit {
           }
         }
       )
+    }else{
+      if(this.thirdStrike == true){
+        this.openThirdStrikeDialog();
+        this.date.setMinutes(new Date().getMinutes() + 10);
+        this.authenticationService.noAccess(this.date);
+        this.authenticationService.removeToken();
+        this.authenticationService.removeStrike();
+        this.router.navigate(["/home"]);
+     }
+      this.authenticationService.strike(1);
+      this.openIncorrectTokenDialog();
     }
-
-    if(this.thirdStrike == true){
-       this.openThirdStrikeDialog();
-       this.date.setMinutes(new Date().getMinutes() + 10);
-       this.authenticationService.noAccess(this.date);
-       this.authenticationService.removeToken();
-       this.authenticationService.removeStrike();
-       this.router.navigate(["/home"]);
-    }
-
-    this.authenticationService.strike(1);
-    this.openIncorrectTokenDialog();
-   
-
-
-
   }
 
   public openTokenConfirmedDialog(){
