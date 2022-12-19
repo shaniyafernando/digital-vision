@@ -42,28 +42,35 @@ export class RegisterComponent implements OnInit {
     this.guest.billingAddress = this.registerForm.value.billingAddress as String;
     this.guest.deliveryAddress = this.registerForm.value.deliveryAddress as String;
 
-      if(this.hasNoAccess == false){
-        this.authenticationService.signUp(this.guest).subscribe(
-          response => {
-            console.log(response);
-            this.authenticationService.token(response);
-            this.router.navigate(['/token'])
-        });
-      }
-       
-      if(this.hasNoAccess == true){
+    this.authenticationService.signUp(this.guest).subscribe(
+      response => {
+        console.log(response);
+        this.authenticationService.token(response);
         
-        if(this.isAfterNoAccessExpiryTime == true){
-          this.authenticationService.signUp(this.guest).subscribe(
-            response => {
-              console.log(response);
-              this.authenticationService.token(response);
-              this.router.navigate(['/token'])
-          })
-        }
+    });
+    this.router.navigate(['/token'])
+      // if(this.hasNoAccess == false){
+      //   this.authenticationService.signUp(this.guest).subscribe(
+      //     response => {
+      //       console.log(response);
+      //       this.authenticationService.token(response);
+      //       this.router.navigate(['/token'])
+      //   });
+      // }
+       
+      // if(this.hasNoAccess == true){
+        
+      //   if(this.isAfterNoAccessExpiryTime == true){
+      //     this.authenticationService.signUp(this.guest).subscribe(
+      //       response => {
+      //         console.log(response);
+      //         this.authenticationService.token(response);
+      //         this.router.navigate(['/token'])
+      //     })
+      //   }
   
-        this.router.navigate(['/home']);
-      }  
+      //   this.router.navigate(['/home']);
+    // }  
   }
   
 

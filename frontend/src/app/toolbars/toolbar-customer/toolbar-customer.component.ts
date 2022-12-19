@@ -16,7 +16,6 @@ export class ToolbarCustomerComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService,private router: Router) { }
 
   ngOnInit(): void {
-    this.userId = this.authenticationService.getCurrentUser();
   }
 
   logout(){
@@ -26,7 +25,8 @@ export class ToolbarCustomerComponent implements OnInit {
   }
 
   deleteAccount(){
-    this.authenticationService.deleteUser(this.userId).subscribe(
+    const userId = this.authenticationService.getCurrentUser();
+    this.authenticationService.deleteUser(userId).subscribe(
       response => {
         console.log(response);
         this.authenticationService.logout();
@@ -34,6 +34,9 @@ export class ToolbarCustomerComponent implements OnInit {
         window.location.reload();
       }
     );
+
+    this.router.navigate(["/home"]);
+    window.location.reload();
   }
 
 }

@@ -24,7 +24,8 @@ public class PaymentController {
     private final PaymentRepository paymentRepository;
 
     @Autowired
-    public PaymentController(PaymentService paymentService, OrderConfirmationEmailService orderConfirmationEmailService, PaymentRepository paymentRepository) {
+    public PaymentController(PaymentService paymentService, OrderConfirmationEmailService orderConfirmationEmailService,
+                             PaymentRepository paymentRepository) {
         this.paymentService = paymentService;
         this.orderConfirmationEmailService = orderConfirmationEmailService;
         this.paymentRepository = paymentRepository;
